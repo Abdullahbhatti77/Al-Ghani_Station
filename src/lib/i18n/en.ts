@@ -1,3 +1,5 @@
+import { shiftsEn } from "./shifts.en";
+
 export const en = {
   "app.name": "PumpHisab",
   "app.tagline": "Simple daily accounts for your petrol pump",
@@ -268,6 +270,7 @@ export const en = {
   "dashboard.step.nozzles": "Add nozzles",
   "dashboard.step.suppliers": "Add suppliers",
   "dashboard.setupProgress": "Setup {pct}% complete",
+  ...shiftsEn,
 } as const;
 
 export type TranslationKey = keyof typeof en;
