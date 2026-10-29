@@ -24,14 +24,14 @@ type Tab = (typeof TABS)[number];
 const PRESETS = ["today", "yesterday", "week", "month", "custom"] as const;
 const isDate = (v: unknown): v is string => typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v);
 
-type Search = { tab: Tab; preset: Preset; from?: string; to?: string };
+type Search = { tab: Tab; preset: Preset; from?: string | undefined; to?: string | undefined };
 
 export const Route = createFileRoute("/_authenticated/_app/reports")({
   validateSearch: (s: Record<string, unknown>): Search => ({
-    tab: (TABS as readonly string[]).includes(s.tab as string) ? (s.tab as Tab) : "daily",
-    preset: (PRESETS as readonly string[]).includes(s.preset as string) ? (s.preset as Preset) : "today",
-    ...(isDate(s.from) ? { from: s.from } : {}),
-    ...(isDate(s.to) ? { to: s.to } : {}),
+    tab: (TABS as readonly string[]).includes(s["tab"] as string) ? (s["tab"] as Tab) : "daily",
+    preset: (PRESETS as readonly string[]).includes(s["preset"] as string) ? (s["preset"] as Preset) : "today",
+    ...(isDate(s["from"]) ? { from: s["from"] } : {}),
+    ...(isDate(s["to"]) ? { to: s["to"] } : {}),
   }),
   head: () => ({
     meta: [

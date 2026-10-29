@@ -60,8 +60,8 @@ function HistoryPage() {
       .map(([k, v]) => `${k}: ${MONEY.has(k) ? formatPKR(Number(v)) : LITRE.has(k) ? `${formatNumber(Number(v), 2)} L` : String(v)}`)
       .join(" · ");
   const changed = (d: Record<string, unknown>) => {
-    const b = d.before as Record<string, unknown> | undefined;
-    const a = d.after as Record<string, unknown> | undefined;
+    const b = d["before"] as Record<string, unknown> | undefined;
+    const a = d["after"] as Record<string, unknown> | undefined;
     if (!a || !b) return "";
     return Object.keys(a).filter((k) => JSON.stringify(a[k]) !== JSON.stringify(b[k])).map((k) => `${k}: ${String(b[k] ?? "—")} → ${String(a[k] ?? "—")}`).join(" · ");
   };
