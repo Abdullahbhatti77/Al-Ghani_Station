@@ -150,6 +150,8 @@ export function financeErrorKey(err: { message?: string } | null): TranslationKe
     ["cash_count_missing", "fin.err.cashCountMissing"],
     ["expense_categories_name_uq", "setup.err.duplicate"],
     ["bad_amount", "validation.positive"],
+    ["attendant_own_shift_only", "err.ownShift"],
+    ["attendant_needs_shift", "err.needShift"],
     ["forbidden", "shift.err.forbidden"],
   ];
   return map.find(([k]) => m.includes(k))?.[1] ?? "setup.err.generic";

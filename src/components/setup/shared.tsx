@@ -13,11 +13,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ConfirmDialog } from "@/components/common/confirm-dialog";
 import { useT, type TranslationKey } from "@/lib/i18n";
 import { myStationQuery } from "@/lib/station";
+import { can, type Permission } from "@/lib/permissions";
 
 export function useStationCtx() {
   const { data } = useSuspenseQuery(myStationQuery);
   const role = data!.role;
-  return { stationId: data!.station.id, canEdit: role === "owner" || role === "manager" };
+  return {
+    stationId: data!.station.id,
+    role,
+    userId: data!.userId,
+    canEdit: role === "owner" || role === "manager",
+    can: (p: Permission) => can(role, p),
+  };
 }
 
 export function StepIntro({ help, example }: { help: TranslationKey; example: TranslationKey }) {

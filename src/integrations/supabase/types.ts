@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          details: Json
+          entity: string
+          entity_id: string | null
+          id: string
+          reason: string | null
+          station_id: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          entity: string
+          entity_id?: string | null
+          id?: string
+          reason?: string | null
+          station_id: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          details?: Json
+          entity?: string
+          entity_id?: string | null
+          id?: string
+          reason?: string | null
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_transactions: {
         Row: {
           amount: number
@@ -1339,6 +1383,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _audit: {
+        Args: {
+          _action: string
+          _details: Json
+          _entity: string
+          _entity_id: string
+          _reason: string
+          _station: string
+        }
+        Returns: undefined
+      }
       _open_shift: {
         Args: { _shift_id: string; _station_id: string }
         Returns: undefined
@@ -1348,6 +1403,14 @@ export type Database = {
         Returns: undefined
       }
       _total_shift: { Args: { _shift_id: string }; Returns: undefined }
+      add_station_member: {
+        Args: {
+          _email: string
+          _role: Database["public"]["Enums"]["station_role"]
+          _station_id: string
+        }
+        Returns: string
+      }
       close_shift: {
         Args: { _reason?: string; _shift_id: string }
         Returns: undefined
@@ -1482,6 +1545,10 @@ export type Database = {
         }
         Returns: string
       }
+      remove_station_member: {
+        Args: { _member_id: string }
+        Returns: undefined
+      }
       request_stock_adjustment: {
         Args: {
           _dip_id: string
@@ -1516,6 +1583,13 @@ export type Database = {
         Args: { _header: Json; _readings: Json; _shift_id: string }
         Returns: undefined
       }
+      set_member_role: {
+        Args: {
+          _member_id: string
+          _role: Database["public"]["Enums"]["station_role"]
+        }
+        Returns: undefined
+      }
       set_shift_rollover: {
         Args: { _reading_id: string; _reason: string; _rollover: number }
         Returns: undefined
@@ -1543,6 +1617,21 @@ export type Database = {
         Args: { _station_id: string }
         Returns: {
           full_name: string
+          role: Database["public"]["Enums"]["station_role"]
+          user_id: string
+        }[]
+      }
+      station_role_of: {
+        Args: { _station_id: string; _user_id: string }
+        Returns: Database["public"]["Enums"]["station_role"]
+      }
+      station_staff: {
+        Args: { _station_id: string }
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          member_id: string
           role: Database["public"]["Enums"]["station_role"]
           user_id: string
         }[]

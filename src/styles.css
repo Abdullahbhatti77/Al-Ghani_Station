@@ -129,3 +129,8 @@
 @utility bg-brand-gradient {
   background-image: var(--gradient-brand);
 }
+
+@media print {
+  [data-sidebar], [data-slot="sidebar"], [data-side] { display: none !important; }
+  body { background: var(--color-background); }
+}

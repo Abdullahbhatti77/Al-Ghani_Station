@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export type StationRole = "owner" | "manager" | "staff";
 export type MyStation = {
   role: StationRole;
+  userId: string;
   station: {
     id: string;
     name: string;
@@ -29,7 +30,7 @@ export const myStationQuery = queryOptions({
       .maybeSingle();
     if (error) throw error;
     if (!data || !data.station) return null;
-    return data as unknown as MyStation;
+    return { ...(data as unknown as Omit<MyStation, "userId">), userId: uid };
   },
 });
 

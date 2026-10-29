@@ -2,6 +2,7 @@ import type { TranslationKey } from "./en";
 import { shiftsUr } from "./shifts.ur";
 import { inventoryUr } from "./inventory.ur";
 import { financeUr } from "./finance.ur";
+import { mvpUr } from "./mvp.ur";
 
 // Roman Urdu (Latin script only). Every key in `en` must exist here.
 export const ur: Record<TranslationKey, string> = {
@@ -121,7 +122,7 @@ export const ur: Record<TranslationKey, string> = {
   "settings.role": "Aap ka role",
   "role.owner": "Owner",
   "role.manager": "Manager",
-  "role.staff": "Staff",
+  "role.staff": "Attendant",
   "settings.members": "Station ke members",
   "settings.memberCol": "Member",
   "settings.roleCol": "Role",
@@ -277,4 +278,5 @@ export const ur: Record<TranslationKey, string> = {
   ...shiftsUr,
   ...inventoryUr,
   ...financeUr,
+  ...mvpUr,
 };

@@ -53,7 +53,8 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/shifts/$shiftId" });
   const { step: raw, done } = Route.useSearch();
-  const { stationId, canEdit } = useStationCtx();
+  const { stationId, canEdit, can, userId } = useStationCtx();
+  const notMine = !can("shifts.any") && shift.attendant_id !== userId;
   const { data: nozzles } = useSuspenseQuery(nozzlesQuery(stationId));
   const { data: products } = useSuspenseQuery(productsQuery(stationId));
   const { data: prices } = useSuspenseQuery(pricesQuery(stationId));
@@ -136,7 +137,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   }
 
   const go = async (s: ShiftStep) => {
-    if (!closed && !(await saveDraft(true))) return;
+    if (!closed && !notMine && !(await saveDraft(true))) return;
     navigate({ search: { step: s } });
   };
   const next = () => {
@@ -181,6 +182,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
         description={`${t("shift.attendant")}: ${person(shift.attendant_id)}`}
         actions={<Button asChild variant="outline" className="h-11"><Link to="/shifts"><ChevronLeft className="h-4 w-4" aria-hidden />{t("shift.backToList")}</Link></Button>}
       />
+      {notMine && !closed && <p role="status" className="mb-4 rounded-lg bg-warning/20 p-3 text-sm font-medium">{t("shift.notYours")}</p>}
       {closed && (
         <p className="mb-4 rounded-lg bg-secondary p-3 text-sm">
           {t("shift.closedReadOnly")} {shift.closed_at && t("shift.closedBy", { d: new Date(shift.closed_at).toLocaleString("en-PK") })}
@@ -316,7 +318,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
               <Big label={t("shift.totalSales")} value={formatPKR(totalSales)} sub={`${L(totalLitres)} L`} strong />
             </div>
             {step === "close" && <ClosingPanels shift={shift} stationId={stationId} totalSales={totalSales} coll={collNums} float={floatNum} counted={countedNum} closed={closed} />}
-            {step === "close" && !closed && (
+            {step === "close" && !closed && !notMine && (
               <div className="flex justify-end">
                 {hasIssues || missingPrice ? (
                   <p role="alert" className="text-sm font-medium text-destructive">{t(missingPrice ? "shift.err.noPrice" : "shift.fixIssues")}</p>

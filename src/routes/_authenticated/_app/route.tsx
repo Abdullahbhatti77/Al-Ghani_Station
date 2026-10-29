@@ -40,7 +40,7 @@ function AppLayout() {
       <div className="flex min-h-screen w-full">
         <AppSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/90 px-3 backdrop-blur sm:px-5">
+          <header className="print:hidden sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background/90 px-3 backdrop-blur sm:px-5">
             <SidebarTrigger className="h-10 w-10" aria-label={t("nav.toggleSidebar")} />
             <div className="min-w-0 flex-1">
               <p className="truncate font-display font-semibold">{data?.station.name}</p>

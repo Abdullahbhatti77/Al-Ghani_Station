@@ -121,6 +121,8 @@ export function shiftErrorKey(err: { message?: string } | null): TranslationKey 
     ["test_exceeds_dispensed", "shift.err.testExceeds"],
     ["future_date", "shift.err.futureDate"],
     ["reason_required", "validation.reasonMin"],
+    ["attendant_own_shift_only", "err.ownShift"],
+    ["attendant_needs_shift", "err.needShift"],
     ["forbidden", "shift.err.forbidden"],
   ];
   return map.find(([k]) => m.includes(k))?.[1] ?? "setup.err.generic";

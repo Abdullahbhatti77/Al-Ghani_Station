@@ -36,7 +36,7 @@ type Dialog = "receive" | "dip" | "adjust" | null;
 
 function FuelStockPage() {
   const t = useT();
-  const { stationId } = useStationCtx();
+  const { stationId, canEdit } = useStationCtx();
   const d = useInventory(stationId);
   const threshold = useThreshold();
   const [product, setProduct] = useState("all");
@@ -55,7 +55,7 @@ function FuelStockPage() {
     <>
       <PageHeader title={t("inv.title")} description={t("inv.desc")} />
       <div className="mb-6 grid gap-2 sm:grid-cols-3">
-        <Button size="lg" className="h-14 text-base" onClick={() => setDialog("receive")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>
+        {canEdit && <Button size="lg" className="h-14 text-base" onClick={() => setDialog("receive")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>}
         <Button size="lg" variant="outline" className="h-14 text-base" onClick={() => setDialog("dip")}><Gauge className="h-5 w-5" aria-hidden />{t("inv.dip")}</Button>
         <Button size="lg" variant="outline" className="h-14 text-base" onClick={() => setDialog("adjust")}><Scale className="h-5 w-5" aria-hidden />{t("inv.adjust")}</Button>
       </div>

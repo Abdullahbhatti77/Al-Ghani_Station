@@ -1,6 +1,7 @@
 import { inventoryEn } from "./inventory.en";
 import { shiftsEn } from "./shifts.en";
 import { financeEn } from "./finance.en";
+import { mvpEn } from "./mvp.en";
 
 export const en = {
   "app.name": "PumpHisab",
@@ -119,7 +120,7 @@ export const en = {
   "settings.role": "Your role",
   "role.owner": "Owner",
   "role.manager": "Manager",
-  "role.staff": "Staff",
+  "role.staff": "Attendant",
   "settings.members": "Station members",
   "settings.memberCol": "Member",
   "settings.roleCol": "Role",
@@ -275,6 +276,7 @@ export const en = {
   ...shiftsEn,
   ...inventoryEn,
   ...financeEn,
+  ...mvpEn,
 } as const;
 
 export type TranslationKey = keyof typeof en;

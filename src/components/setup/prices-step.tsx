@@ -28,7 +28,8 @@ const fmtDate = (iso: string, lang: string) =>
 export function PricesStep() {
   const { t, lang } = useI18n();
   const qc = useQueryClient();
-  const { stationId, canEdit } = useStationCtx();
+  const { stationId, can } = useStationCtx();
+  const canEdit = can("prices.set");
   const { data: products } = useSuspenseQuery(productsQuery(stationId));
   const { data: prices } = useSuspenseQuery(pricesQuery(stationId));
   const [adding, setAdding] = useState<string | null>(null);
