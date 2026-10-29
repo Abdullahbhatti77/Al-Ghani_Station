@@ -69,7 +69,9 @@ export const invoiceMismatch = (litres: number, rate: number, invoice: number) =
 // ---------- queries ----------
 const byStation = <K extends "stock_movements" | "tank_dips" | "fuel_deliveries" | "stock_adjustments">(table: K, order: string) =>
   async (stationId: string) => {
-    const { data, error } = await supabase.from(table).select("*").eq("station_id", stationId).order(order, { ascending: false }).limit(5000);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const q = supabase.from(table as "tank_dips").select("*") as any;
+    const { data, error } = await q.eq("station_id", stationId).order(order, { ascending: false }).limit(5000);
     if (error) throw error;
     return data as T[K]["Row"][];
   };
