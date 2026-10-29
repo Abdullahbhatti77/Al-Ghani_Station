@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { creditCheck, customerBalance, customerLedger, drawerExpected, salesCollection, shiftLinked, supplierOutstanding, toCSV } from "./finance";
 
 const tx = (kind: "credit_sale" | "payment", amount: number, at: string, extra: Record<string, unknown> = {}) =>
-  ({ kind, amount, occurred_at: at, created_at: at, reversed_at: null, method: kind === "payment" ? "cash" : null, ...extra }) as never;
+  ({ kind, amount, occurred_at: at, created_at: at, reversed_at: null, method: kind === "payment" ? "cash" : null, ...extra }) as unknown as Parameters<typeof customerLedger>[1][number];
 
 describe("customer udhaar", () => {
   it("balance = opening + credit sales − repayments; reversed entries ignored", () => {

@@ -147,7 +147,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   async function closeShift() {
     if (!(await saveDraft(true))) return;
     setBusy(true);
-    const { error } = await supabase.rpc("close_shift", { _shift_id: shift.id, _reason: closeReason || undefined });
+    const { error } = await supabase.rpc("close_shift", { _shift_id: shift.id, ...(closeReason ? { _reason: closeReason } : {}) });
     setBusy(false);
     refresh();
     if (error) return void toast.error(t(shiftErrorKey(error)));
