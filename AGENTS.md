@@ -15,3 +15,7 @@
 - Station + owner membership is created only through the `create_station_with_owner` security-definer RPC — clients can never insert memberships.
 - Signed-in pages live under `src/routes/_authenticated/_app/` (sidebar layout, redirects to `/onboarding` when the user has no station) — single gate for station context.
 - Dashboard figures are `null` until real records exist; never render demo numbers as real — owners must trust the numbers.
+- Setup records (products, tanks, nozzles, suppliers) are archived via `is_active`, never deleted — history must stay reportable.
+- `fuel_prices` is insert-only; current price = latest `effective_at <= now` (`currentPrice` in `src/lib/setup.ts`) — past prices and sales never change.
+- Tank stock changes only through the `correct_tank_stock` RPC (trigger blocks direct edits) — every correction is logged with a reason.
+- Nozzle/tank product match is enforced by DB trigger `check_nozzle_tank` as well as the UI.
