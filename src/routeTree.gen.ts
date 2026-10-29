@@ -20,6 +20,7 @@ import { Route as AuthenticatedAppCustomersRouteImport } from './routes/_authent
 import { Route as AuthenticatedAppDashboardRouteImport } from './routes/_authenticated/_app/dashboard'
 import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenticated/_app/expenses'
 import { Route as AuthenticatedAppFuelStockRouteImport } from './routes/_authenticated/_app/fuel-stock'
+import { Route as AuthenticatedAppHistoryRouteImport } from './routes/_authenticated/_app/history'
 import { Route as AuthenticatedAppReportsRouteImport } from './routes/_authenticated/_app/reports'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/_app/settings'
 import { Route as AuthenticatedAppSetupRouteImport } from './routes/_authenticated/_app/setup'
@@ -87,6 +88,11 @@ const AuthenticatedAppFuelStockRoute =
     path: '/fuel-stock',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppHistoryRoute = AuthenticatedAppHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
 const AuthenticatedAppReportsRoute = AuthenticatedAppReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -149,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedAppDashboardRoute
   '/expenses': typeof AuthenticatedAppExpensesRoute
   '/fuel-stock': typeof AuthenticatedAppFuelStockRoute
+  '/history': typeof AuthenticatedAppHistoryRoute
   '/reports': typeof AuthenticatedAppReportsRoute
   '/settings': typeof AuthenticatedAppSettingsRoute
   '/setup': typeof AuthenticatedAppSetupRoute
@@ -169,6 +176,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedAppDashboardRoute
   '/expenses': typeof AuthenticatedAppExpensesRoute
   '/fuel-stock': typeof AuthenticatedAppFuelStockRoute
+  '/history': typeof AuthenticatedAppHistoryRoute
   '/reports': typeof AuthenticatedAppReportsRoute
   '/settings': typeof AuthenticatedAppSettingsRoute
   '/setup': typeof AuthenticatedAppSetupRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/dashboard': typeof AuthenticatedAppDashboardRoute
   '/_authenticated/_app/expenses': typeof AuthenticatedAppExpensesRoute
   '/_authenticated/_app/fuel-stock': typeof AuthenticatedAppFuelStockRoute
+  '/_authenticated/_app/history': typeof AuthenticatedAppHistoryRoute
   '/_authenticated/_app/reports': typeof AuthenticatedAppReportsRoute
   '/_authenticated/_app/settings': typeof AuthenticatedAppSettingsRoute
   '/_authenticated/_app/setup': typeof AuthenticatedAppSetupRoute
@@ -214,6 +223,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/expenses'
     | '/fuel-stock'
+    | '/history'
     | '/reports'
     | '/settings'
     | '/setup'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/expenses'
     | '/fuel-stock'
+    | '/history'
     | '/reports'
     | '/settings'
     | '/setup'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/dashboard'
     | '/_authenticated/_app/expenses'
     | '/_authenticated/_app/fuel-stock'
+    | '/_authenticated/_app/history'
     | '/_authenticated/_app/reports'
     | '/_authenticated/_app/settings'
     | '/_authenticated/_app/setup'
@@ -354,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppFuelStockRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/history': {
+      id: '/_authenticated/_app/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedAppHistoryRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/reports': {
       id: '/_authenticated/_app/reports'
       path: '/reports'
@@ -425,6 +444,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppDashboardRoute: typeof AuthenticatedAppDashboardRoute
   AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRoute
   AuthenticatedAppFuelStockRoute: typeof AuthenticatedAppFuelStockRoute
+  AuthenticatedAppHistoryRoute: typeof AuthenticatedAppHistoryRoute
   AuthenticatedAppReportsRoute: typeof AuthenticatedAppReportsRoute
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
   AuthenticatedAppSetupRoute: typeof AuthenticatedAppSetupRoute
@@ -441,6 +461,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppDashboardRoute: AuthenticatedAppDashboardRoute,
   AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRoute,
   AuthenticatedAppFuelStockRoute: AuthenticatedAppFuelStockRoute,
+  AuthenticatedAppHistoryRoute: AuthenticatedAppHistoryRoute,
   AuthenticatedAppReportsRoute: AuthenticatedAppReportsRoute,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
   AuthenticatedAppSetupRoute: AuthenticatedAppSetupRoute,
