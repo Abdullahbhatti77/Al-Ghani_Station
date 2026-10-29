@@ -14,6 +14,293 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_transactions: {
+        Row: {
+          amount: number
+          approval_reason: string | null
+          approved_by: string | null
+          client_key: string
+          created_at: string
+          created_by: string
+          customer_id: string
+          id: string
+          kind: string
+          litres: number | null
+          method: string | null
+          notes: string | null
+          occurred_at: string
+          over_limit: boolean
+          price_id: string | null
+          product_id: string | null
+          rate: number | null
+          reference: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          shift_id: string | null
+          station_id: string
+          vehicle: string | null
+        }
+        Insert: {
+          amount: number
+          approval_reason?: string | null
+          approved_by?: string | null
+          client_key: string
+          created_at?: string
+          created_by: string
+          customer_id: string
+          id?: string
+          kind: string
+          litres?: number | null
+          method?: string | null
+          notes?: string | null
+          occurred_at?: string
+          over_limit?: boolean
+          price_id?: string | null
+          product_id?: string | null
+          rate?: number | null
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id?: string | null
+          station_id: string
+          vehicle?: string | null
+        }
+        Update: {
+          amount?: number
+          approval_reason?: string | null
+          approved_by?: string | null
+          client_key?: string
+          created_at?: string
+          created_by?: string
+          customer_id?: string
+          id?: string
+          kind?: string
+          litres?: number | null
+          method?: string | null
+          notes?: string | null
+          occurred_at?: string
+          over_limit?: boolean
+          price_id?: string | null
+          product_id?: string | null
+          rate?: number | null
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id?: string | null
+          station_id?: string
+          vehicle?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_transactions_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "fuel_prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_transactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_transactions_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_transactions_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          address: string | null
+          business_name: string | null
+          created_at: string
+          created_by: string
+          credit_limit: number | null
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          opening_balance: number
+          phone: string | null
+          station_id: string
+          updated_at: string
+          vehicles: string[]
+        }
+        Insert: {
+          address?: string | null
+          business_name?: string | null
+          created_at?: string
+          created_by?: string
+          credit_limit?: number | null
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          opening_balance?: number
+          phone?: string | null
+          station_id: string
+          updated_at?: string
+          vehicles?: string[]
+        }
+        Update: {
+          address?: string | null
+          business_name?: string | null
+          created_at?: string
+          created_by?: string
+          credit_limit?: number | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
+          opening_balance?: number
+          phone?: string | null
+          station_id?: string
+          updated_at?: string
+          vehicles?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_categories: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          station_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          station_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          station_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_categories_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category_id: string
+          client_key: string
+          created_at: string
+          created_by: string
+          description: string
+          id: string
+          method: string
+          occurred_at: string
+          reference: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          shift_id: string | null
+          station_id: string
+        }
+        Insert: {
+          amount: number
+          category_id: string
+          client_key: string
+          created_at?: string
+          created_by: string
+          description: string
+          id?: string
+          method: string
+          occurred_at: string
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id?: string | null
+          station_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string
+          client_key?: string
+          created_at?: string
+          created_by?: string
+          description?: string
+          id?: string
+          method?: string
+          occurred_at?: string
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id?: string | null
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fuel_deliveries: {
         Row: {
           calculated_amount: number
@@ -280,6 +567,63 @@ export type Database = {
         }
         Relationships: []
       }
+      shift_cash_movements: {
+        Row: {
+          amount: number
+          client_key: string
+          created_at: string
+          created_by: string
+          id: string
+          kind: string
+          reason: string
+          reversed_at: string | null
+          reversed_by: string | null
+          shift_id: string
+          station_id: string
+        }
+        Insert: {
+          amount: number
+          client_key: string
+          created_at?: string
+          created_by: string
+          id?: string
+          kind: string
+          reason: string
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id: string
+          station_id: string
+        }
+        Update: {
+          amount?: number
+          client_key?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          kind?: string
+          reason?: string
+          reversed_at?: string | null
+          reversed_by?: string | null
+          shift_id?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_cash_movements_shift_id_fkey"
+            columns: ["shift_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_cash_movements_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shift_corrections: {
         Row: {
           created_at: string
@@ -421,12 +765,20 @@ export type Database = {
           attendant_id: string
           bank_received: number
           card_received: number
+          cash_counted: number | null
+          cash_in: number
+          cash_out: number
           cash_received: number
+          cash_repayments: number
+          cash_variance: number | null
           closed_at: string | null
           closed_by: string | null
           created_at: string
           created_by: string
+          credit_sales: number
           difference: number | null
+          drawer_expected: number | null
+          drawer_expenses: number
           id: string
           name: string
           notes: string | null
@@ -440,18 +792,28 @@ export type Database = {
           total_litres: number | null
           total_sales: number | null
           updated_at: string
+          variance_approved_by: string | null
+          variance_reason: string | null
           wallet_received: number
         }
         Insert: {
           attendant_id: string
           bank_received?: number
           card_received?: number
+          cash_counted?: number | null
+          cash_in?: number
+          cash_out?: number
           cash_received?: number
+          cash_repayments?: number
+          cash_variance?: number | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
           created_by?: string
+          credit_sales?: number
           difference?: number | null
+          drawer_expected?: number | null
+          drawer_expenses?: number
           id?: string
           name: string
           notes?: string | null
@@ -465,18 +827,28 @@ export type Database = {
           total_litres?: number | null
           total_sales?: number | null
           updated_at?: string
+          variance_approved_by?: string | null
+          variance_reason?: string | null
           wallet_received?: number
         }
         Update: {
           attendant_id?: string
           bank_received?: number
           card_received?: number
+          cash_counted?: number | null
+          cash_in?: number
+          cash_out?: number
           cash_received?: number
+          cash_repayments?: number
+          cash_variance?: number | null
           closed_at?: string | null
           closed_by?: string | null
           created_at?: string
           created_by?: string
+          credit_sales?: number
           difference?: number | null
+          drawer_expected?: number | null
+          drawer_expenses?: number
           id?: string
           name?: string
           notes?: string | null
@@ -490,6 +862,8 @@ export type Database = {
           total_litres?: number | null
           total_sales?: number | null
           updated_at?: string
+          variance_approved_by?: string | null
+          variance_reason?: string | null
           wallet_received?: number
         }
         Relationships: [
@@ -690,6 +1064,72 @@ export type Database = {
             columns: ["tank_id"]
             isOneToOne: false
             referencedRelation: "tanks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      supplier_payments: {
+        Row: {
+          amount: number
+          client_key: string
+          created_at: string
+          created_by: string
+          id: string
+          method: string
+          notes: string | null
+          paid_at: string
+          reference: string | null
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          station_id: string
+          supplier_id: string
+        }
+        Insert: {
+          amount: number
+          client_key: string
+          created_at?: string
+          created_by: string
+          id?: string
+          method: string
+          notes?: string | null
+          paid_at: string
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          station_id: string
+          supplier_id: string
+        }
+        Update: {
+          amount?: number
+          client_key?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          method?: string
+          notes?: string | null
+          paid_at?: string
+          reference?: string | null
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          station_id?: string
+          supplier_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_payments_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_payments_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
@@ -899,12 +1339,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _open_shift: {
+        Args: { _shift_id: string; _station_id: string }
+        Returns: undefined
+      }
       _price_shift_reading: {
         Args: { _reading_id: string }
         Returns: undefined
       }
       _total_shift: { Args: { _shift_id: string }; Returns: undefined }
-      close_shift: { Args: { _shift_id: string }; Returns: undefined }
+      close_shift: {
+        Args: { _reason?: string; _shift_id: string }
+        Returns: undefined
+      }
       correct_closed_collections: {
         Args: { _reason: string; _shift_id: string; _values: Json }
         Returns: undefined
@@ -935,6 +1382,7 @@ export type Database = {
         }
         Returns: string
       }
+      customer_balance: { Args: { _customer_id: string }; Returns: number }
       has_station_role: {
         Args: {
           _roles: Database["public"]["Enums"]["station_role"][]
@@ -947,6 +1395,46 @@ export type Database = {
         Args: { _station_id: string; _user_id: string }
         Returns: boolean
       }
+      pay_supplier: {
+        Args: {
+          _amount: number
+          _client_key: string
+          _method: string
+          _notes: string
+          _paid_at: string
+          _reference: string
+          _supplier_id: string
+        }
+        Returns: string
+      }
+      receive_customer_payment: {
+        Args: {
+          _amount: number
+          _client_key: string
+          _customer_id: string
+          _method: string
+          _notes: string
+          _occurred_at: string
+          _reference: string
+          _shift_id: string
+        }
+        Returns: string
+      }
+      record_credit_sale: {
+        Args: {
+          _amount: number
+          _approval_reason: string
+          _client_key: string
+          _customer_id: string
+          _litres: number
+          _notes: string
+          _product_id: string
+          _reference: string
+          _shift_id: string
+          _vehicle: string
+        }
+        Returns: string
+      }
       record_delivery: {
         Args: {
           _challan: string
@@ -958,6 +1446,30 @@ export type Database = {
           _station_id: string
           _supplier_id: string
           _tank_id: string
+        }
+        Returns: string
+      }
+      record_expense: {
+        Args: {
+          _amount: number
+          _category_id: string
+          _client_key: string
+          _description: string
+          _method: string
+          _occurred_at: string
+          _reference: string
+          _shift_id: string
+          _station_id: string
+        }
+        Returns: string
+      }
+      record_shift_cash_movement: {
+        Args: {
+          _amount: number
+          _client_key: string
+          _kind: string
+          _reason: string
+          _shift_id: string
         }
         Returns: string
       }
@@ -979,8 +1491,21 @@ export type Database = {
         }
         Returns: string
       }
+      reverse_customer_txn: {
+        Args: { _reason: string; _txn_id: string }
+        Returns: undefined
+      }
       reverse_delivery: {
         Args: { _delivery_id: string; _reason: string }
+        Returns: undefined
+      }
+      reverse_expense: {
+        Args: { _expense_id: string; _reason: string }
+        Returns: undefined
+      }
+      reverse_shift_cash_movement: { Args: { _id: string }; Returns: undefined }
+      reverse_supplier_payment: {
+        Args: { _payment_id: string; _reason: string }
         Returns: undefined
       }
       review_stock_adjustment: {
@@ -1022,6 +1547,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      supplier_balance: { Args: { _supplier_id: string }; Returns: number }
       tank_expected: {
         Args: { _at?: string; _tank_id: string }
         Returns: number
