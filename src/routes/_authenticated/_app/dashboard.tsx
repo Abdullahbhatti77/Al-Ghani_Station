@@ -12,7 +12,11 @@ import { useSuspenseQueries } from "@tanstack/react-query";
 import { Banknote, CreditCard, HandCoins, Plus, Truck, UserPlus } from "lucide-react";
 import { formatPKR } from "@/lib/setup";
 import { customersQuery, customerTxnsQuery, customerBalance, expensesQuery } from "@/lib/finance";
-import { round2, todayKarachi } from "@/lib/shifts";
+import { round2, shiftsQuery, todayKarachi } from "@/lib/shifts";
+import { openShiftsQuery, supplierPaymentsQuery, supplierOutstanding } from "@/lib/finance";
+import { breakdown, compareDip, deliveriesQuery, dipsQuery, movementsQuery } from "@/lib/inventory";
+import { suppliersQuery, tanksQuery, formatNumber } from "@/lib/setup";
+import { can } from "@/lib/permissions";
 import { CreditSaleDialog, CustomerDialog, ExpenseDialog, PaySupplierDialog, PaymentDialog } from "@/components/finance/dialogs";
 import { ReceiveFuelDialog } from "@/components/inventory/dialogs";
 
@@ -34,9 +38,16 @@ function Dashboard() {
   const station = data!.station;
 
   const { status } = useSetupData(station.id);
-  const [cu, tx, ex] = useSuspenseQueries({ queries: [customersQuery(station.id), customerTxnsQuery(station.id), expensesQuery(station.id)] });
+  const today0 = todayKarachi();
+  const [cu, tx, ex, sh, op, tk, mv, dp, dl, sp, su] = useSuspenseQueries({
+    queries: [
+      customersQuery(station.id), customerTxnsQuery(station.id), expensesQuery(station.id), shiftsQuery(station.id, today0), openShiftsQuery(station.id),
+      tanksQuery(station.id), movementsQuery(station.id), dipsQuery(station.id), deliveriesQuery(station.id), supplierPaymentsQuery(station.id), suppliersQuery(station.id),
+    ],
+  });
   const [qa, setQa] = useState<"cust" | "sale" | "pay" | "fuel" | "sup" | "exp" | null>(null);
   const canEdit = data!.role !== "staff";
+  const canDeliver = can(data!.role, "deliveries.record");
   const udhaar = cu.data.length ? round2(cu.data.reduce((a, c) => a + customerBalance(Number(c.opening_balance), tx.data.filter((x) => x.customer_id === c.id)), 0)) : null;
   const today = todayKarachi();
   const todays = ex.data.filter((x) => !x.reversed_at && new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Karachi" }).format(new Date(x.occurred_at)) === today);
@@ -54,12 +65,32 @@ function Dashboard() {
   const doneCount = steps.filter((s) => s.done).length;
   const incomplete = doneCount < steps.length;
 
-  // No business records exist yet: every figure is null (shown as "No data yet"), never a fake number.
-  const stats: { key: TranslationKey; value: string | null }[] = [
-    { key: "dashboard.todaySales", value: null },
-    { key: "dashboard.fuelLitres", value: null },
-    { key: "dashboard.udhaar", value: udhaar === null ? null : formatPKR(udhaar) },
-    { key: "dashboard.expenses", value: todayExp === null ? null : formatPKR(todayExp) },
+  // Every figure comes from saved records; null means nothing is recorded yet ("No data yet"), never a fake number.
+  const closedToday = sh.data.filter((x) => x.status === "closed");
+  const sum = (f: (x: (typeof closedToday)[0]) => number) => round2(closedToday.reduce((a, x) => a + f(x), 0));
+  const activeTanks = tk.data.filter((x) => x.is_active);
+  const expected = activeTanks.length ? round2(activeTanks.reduce((a, x) => a + breakdown(mv.data.filter((m) => m.tank_id === x.id)).expected, 0)) : null;
+  const dipCmp = activeTanks
+    .map((x) => compareDip(mv.data.filter((m) => m.tank_id === x.id), dp.data.filter((d) => d.tank_id === x.id)))
+    .filter((c) => c !== null)
+    .sort((a, b) => +new Date(b!.dip.measured_at) - +new Date(a!.dip.measured_at))[0] ?? null;
+  const supDue = su.data.length
+    ? round2(su.data.reduce((a, x) => a + supplierOutstanding(Number(x.opening_payable), dl.data.filter((d) => d.supplier_id === x.id), sp.data.filter((p) => p.supplier_id === x.id)).outstanding, 0))
+    : null;
+  const openShift = op.data[0];
+  const L = (n: number) => `${formatNumber(n, 2)} L`;
+
+  type Card = { key: TranslationKey; value: string | null; to: "/shifts" | "/customers" | "/fuel-stock" | "/suppliers" | "/expenses" | "/reports"; hint?: TranslationKey };
+  const stats: Card[] = [
+    { key: "dashboard.todaySales", value: closedToday.length ? formatPKR(sum((x) => Number(x.total_sales ?? 0))) : null, to: "/shifts", hint: "dash.salesHint" },
+    { key: "dashboard.fuelLitres", value: closedToday.length ? L(sum((x) => Number(x.total_litres ?? 0))) : null, to: "/shifts", hint: "dash.salesHint" },
+    { key: "dash.cashReceived", value: closedToday.length ? formatPKR(sum((x) => Number(x.cash_received ?? 0))) : null, to: "/shifts", hint: "dash.salesHint" },
+    { key: "dash.shift", value: openShift ? t("dash.shiftOpen", { name: openShift.name }) : t("dash.shiftNone"), to: "/shifts" },
+    { key: "dashboard.udhaar", value: udhaar === null ? null : formatPKR(udhaar), to: "/customers" },
+    { key: "dash.supplierDue", value: supDue === null ? null : formatPKR(supDue), to: "/suppliers" },
+    { key: "dash.expected", value: expected === null ? null : L(expected), to: "/fuel-stock" },
+    { key: "dash.lastDip", value: dipCmp ? `${dipCmp.difference > 0 ? "+" : ""}${L(dipCmp.difference)}` : null, to: "/fuel-stock" },
+    { key: "dashboard.expenses", value: todayExp === null ? null : formatPKR(todayExp), to: "/expenses" },
   ];
 
   return (
@@ -106,7 +137,7 @@ function Dashboard() {
           {canEdit && <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("cust")}><UserPlus className="h-5 w-5" aria-hidden />{t("fin.qa.addCustomer")}</Button>}
           <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("sale")} disabled={!cu.data.length}><CreditCard className="h-5 w-5" aria-hidden />{t("fin.qa.creditSale")}</Button>
           <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("pay")} disabled={!cu.data.length}><HandCoins className="h-5 w-5" aria-hidden />{t("fin.qa.receivePayment")}</Button>
-          <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("fuel")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>
+          {canDeliver && <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("fuel")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>}
           {canEdit && <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("sup")}><Banknote className="h-5 w-5" aria-hidden />{t("fin.qa.paySupplier")}</Button>}
           <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("exp")}><Plus className="h-5 w-5" aria-hidden />{t("fin.qa.addExpense")}</Button>
         </div>
@@ -118,10 +149,17 @@ function Dashboard() {
         {qa === "exp" && <ExpenseDialog onClose={() => setQa(null)} />}
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
-          <StatCard key={s.key} label={t(s.key)} value={s.value} emptyLabel={t("common.noData")} hint={t("dashboard.noDataHint")} storedLabel={t("common.stored")} />
+          <Link key={s.key} to={s.to} className="block rounded-xl transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={`${t(s.key)} — ${t("dash.open")}`}>
+            <StatCard label={t(s.key)} value={s.value} emptyLabel={t("common.noData")} hint={s.hint ? t(s.hint) : t("dashboard.noDataHint")} storedLabel={t("common.stored")} />
+          </Link>
         ))}
+        <div className="rounded-xl border border-dashed bg-card p-5">
+          <p className="text-sm font-medium text-muted-foreground">{t("dash.profit")}</p>
+          <p className="mt-3 font-display text-xl font-bold text-muted-foreground">{t("dash.profitNA")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("dash.profitNAHint")}</p>
+        </div>
       </div>
     </>
   );
