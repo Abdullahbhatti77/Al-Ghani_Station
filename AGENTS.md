@@ -19,3 +19,4 @@
 - `fuel_prices` is insert-only; current price = latest `effective_at <= now` (`currentPrice` in `src/lib/setup.ts`) — past prices and sales never change.
 - Tank stock changes only through the `correct_tank_stock` RPC (trigger blocks direct edits) — every correction is logged with a reason.
 - Nozzle/tank product match is enforced by DB trigger `check_nozzle_tank` as well as the UI.
+- Shift data (shifts, shift_readings, shift_corrections) is read-only to clients; all writes go through security-definer RPCs (start_shift, save_shift_draft, close_shift, correct_*) that recompute litres/amount server-side with the same formula as `src/lib/shifts.ts` — prevents tampering and double posting.

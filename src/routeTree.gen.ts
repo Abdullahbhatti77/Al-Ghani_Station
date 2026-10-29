@@ -25,6 +25,7 @@ import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppSetupRouteImport } from './routes/_authenticated/_app/setup'
 import { Route as AuthenticatedAppShiftsRouteImport } from './routes/_authenticated/_app/shifts'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/_app/suppliers'
+import { Route as AuthenticatedAppShiftsShiftIdRouteImport } from './routes/_authenticated/_app/shifts_.$shiftId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -110,6 +111,12 @@ const AuthenticatedAppSuppliersRoute =
     path: '/suppliers',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppShiftsShiftIdRoute =
+  AuthenticatedAppShiftsShiftIdRouteImport.update({
+    id: '/shifts_/$shiftId',
+    path: '/shifts/$shiftId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -142,6 +150,7 @@ export interface FileRoutesByTo {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,6 +170,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/setup': typeof AuthenticatedAppSetupRoute
   '/_authenticated/_app/shifts': typeof AuthenticatedAppShiftsRoute
   '/_authenticated/_app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/_authenticated/_app/shifts_/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -179,6 +189,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/shifts/$shiftId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/shifts/$shiftId'
   id:
     | '__root__'
     | '/'
@@ -213,6 +225,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/setup'
     | '/_authenticated/_app/shifts'
     | '/_authenticated/_app/suppliers'
+    | '/_authenticated/_app/shifts_/$shiftId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -337,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSuppliersRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/shifts_/$shiftId': {
+      id: '/_authenticated/_app/shifts_/$shiftId'
+      path: '/shifts/$shiftId'
+      fullPath: '/shifts/$shiftId'
+      preLoaderRoute: typeof AuthenticatedAppShiftsShiftIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
   }
 }
 
@@ -350,6 +370,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppSetupRoute: typeof AuthenticatedAppSetupRoute
   AuthenticatedAppShiftsRoute: typeof AuthenticatedAppShiftsRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
+  AuthenticatedAppShiftsShiftIdRoute: typeof AuthenticatedAppShiftsShiftIdRoute
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
@@ -362,6 +383,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSetupRoute: AuthenticatedAppSetupRoute,
   AuthenticatedAppShiftsRoute: AuthenticatedAppShiftsRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
+  AuthenticatedAppShiftsShiftIdRoute: AuthenticatedAppShiftsShiftIdRoute,
 }
 
 const AuthenticatedAppRouteRouteWithChildren =

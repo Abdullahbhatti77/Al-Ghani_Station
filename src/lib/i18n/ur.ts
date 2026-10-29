@@ -1,4 +1,5 @@
 import type { TranslationKey } from "./en";
+import { shiftsUr } from "./shifts.ur";
 
 // Roman Urdu (Latin script only). Every key in `en` must exist here.
 export const ur: Record<TranslationKey, string> = {
@@ -271,4 +272,5 @@ export const ur: Record<TranslationKey, string> = {
   "dashboard.step.nozzles": "Nozzles shamil karein",
   "dashboard.step.suppliers": "Suppliers shamil karein",
   "dashboard.setupProgress": "Setup {pct}% mukammal",
+  ...shiftsUr,
 };
