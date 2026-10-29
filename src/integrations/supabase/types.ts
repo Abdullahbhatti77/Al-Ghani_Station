@@ -14,16 +14,124 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          preferred_language: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          preferred_language?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          preferred_language?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      station_members: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["station_role"]
+          station_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["station_role"]
+          station_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["station_role"]
+          station_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "station_members_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stations: {
+        Row: {
+          city: string
+          contact_phone: string
+          created_at: string
+          created_by: string
+          id: string
+          name: string
+          preferred_language: string
+          updated_at: string
+        }
+        Insert: {
+          city: string
+          contact_phone: string
+          created_at?: string
+          created_by: string
+          id?: string
+          name: string
+          preferred_language?: string
+          updated_at?: string
+        }
+        Update: {
+          city?: string
+          contact_phone?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          name?: string
+          preferred_language?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_station_with_owner: {
+        Args: {
+          _city: string
+          _language: string
+          _name: string
+          _phone: string
+        }
+        Returns: string
+      }
+      has_station_role: {
+        Args: {
+          _roles: Database["public"]["Enums"]["station_role"][]
+          _station_id: string
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_station_member: {
+        Args: { _station_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      station_role: "owner" | "manager" | "staff"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +258,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      station_role: ["owner", "manager", "staff"],
+    },
   },
 } as const
