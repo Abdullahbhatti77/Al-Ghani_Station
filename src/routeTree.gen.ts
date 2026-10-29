@@ -25,6 +25,7 @@ import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppSetupRouteImport } from './routes/_authenticated/_app/setup'
 import { Route as AuthenticatedAppShiftsRouteImport } from './routes/_authenticated/_app/shifts'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/_app/suppliers'
+import { Route as AuthenticatedAppFuelStockTankIdRouteImport } from './routes/_authenticated/_app/fuel-stock_.$tankId'
 import { Route as AuthenticatedAppShiftsShiftIdRouteImport } from './routes/_authenticated/_app/shifts_.$shiftId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -111,6 +112,12 @@ const AuthenticatedAppSuppliersRoute =
     path: '/suppliers',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppFuelStockTankIdRoute =
+  AuthenticatedAppFuelStockTankIdRouteImport.update({
+    id: '/fuel-stock_/$tankId',
+    path: '/fuel-stock/$tankId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppShiftsShiftIdRoute =
   AuthenticatedAppShiftsShiftIdRouteImport.update({
     id: '/shifts_/$shiftId',
@@ -133,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/fuel-stock/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRoutesByTo {
@@ -150,6 +158,7 @@ export interface FileRoutesByTo {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/fuel-stock/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRoutesById {
@@ -170,6 +179,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/setup': typeof AuthenticatedAppSetupRoute
   '/_authenticated/_app/shifts': typeof AuthenticatedAppShiftsRoute
   '/_authenticated/_app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/_authenticated/_app/fuel-stock_/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/_authenticated/_app/shifts_/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
 }
 export interface FileRouteTypes {
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/fuel-stock/$tankId'
     | '/shifts/$shiftId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/fuel-stock/$tankId'
     | '/shifts/$shiftId'
   id:
     | '__root__'
@@ -225,6 +237,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/setup'
     | '/_authenticated/_app/shifts'
     | '/_authenticated/_app/suppliers'
+    | '/_authenticated/_app/fuel-stock_/$tankId'
     | '/_authenticated/_app/shifts_/$shiftId'
   fileRoutesById: FileRoutesById
 }
@@ -350,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSuppliersRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/fuel-stock_/$tankId': {
+      id: '/_authenticated/_app/fuel-stock_/$tankId'
+      path: '/fuel-stock/$tankId'
+      fullPath: '/fuel-stock/$tankId'
+      preLoaderRoute: typeof AuthenticatedAppFuelStockTankIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/shifts_/$shiftId': {
       id: '/_authenticated/_app/shifts_/$shiftId'
       path: '/shifts/$shiftId'
@@ -370,6 +390,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppSetupRoute: typeof AuthenticatedAppSetupRoute
   AuthenticatedAppShiftsRoute: typeof AuthenticatedAppShiftsRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
+  AuthenticatedAppFuelStockTankIdRoute: typeof AuthenticatedAppFuelStockTankIdRoute
   AuthenticatedAppShiftsShiftIdRoute: typeof AuthenticatedAppShiftsShiftIdRoute
 }
 
@@ -383,6 +404,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSetupRoute: AuthenticatedAppSetupRoute,
   AuthenticatedAppShiftsRoute: AuthenticatedAppShiftsRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
+  AuthenticatedAppFuelStockTankIdRoute: AuthenticatedAppFuelStockTankIdRoute,
   AuthenticatedAppShiftsShiftIdRoute: AuthenticatedAppShiftsShiftIdRoute,
 }
 

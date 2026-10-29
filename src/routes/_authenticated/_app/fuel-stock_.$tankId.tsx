@@ -12,7 +12,7 @@ import { AdjustmentsList, DeliveriesTable, DipsTable, MovementsTable } from "@/c
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { formatNumber } from "@/lib/setup";
-import { AlertBadges, tankState, useThreshold, VarianceText } from "./fuel-stock";
+import { AlertBadges, tankState, useThreshold, VarianceText } from "@/components/inventory/tank-ui";
 
 export const Route = createFileRoute("/_authenticated/_app/fuel-stock_/$tankId")({
   head: () => ({
