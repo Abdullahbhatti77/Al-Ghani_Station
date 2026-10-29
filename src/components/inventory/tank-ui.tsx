@@ -10,7 +10,7 @@ const L = (n: number) => formatNumber(n, 2);
 
 export function useThreshold() {
   const { data } = useSuspenseQuery(myStationQuery);
-  const v = (data?.station as { dip_variance_litres?: number | null } | undefined)?.dip_variance_litres;
+  const v = data?.station.dip_variance_litres;
   return v === null || v === undefined ? null : Number(v);
 }
 
