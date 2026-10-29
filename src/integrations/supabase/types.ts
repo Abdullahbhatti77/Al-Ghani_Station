@@ -191,6 +191,228 @@ export type Database = {
         }
         Relationships: []
       }
+      shift_corrections: {
+        Row: {
+          created_at: string
+          created_by: string
+          field: string
+          id: string
+          new_value: number | null
+          old_value: number | null
+          reading_id: string | null
+          reason: string
+          shift_id: string
+          station_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          field: string
+          id?: string
+          new_value?: number | null
+          old_value?: number | null
+          reading_id?: string | null
+          reason: string
+          shift_id: string
+          station_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          field?: string
+          id?: string
+          new_value?: number | null
+          old_value?: number | null
+          reading_id?: string | null
+          reason?: string
+          shift_id?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_corrections_shift_id_station_id_fkey"
+            columns: ["shift_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id", "station_id"]
+          },
+        ]
+      }
+      shift_readings: {
+        Row: {
+          amount: number | null
+          closing_reading: number | null
+          created_at: string
+          id: string
+          is_draft: boolean
+          litres_sold: number | null
+          nozzle_id: string
+          opening_reading: number
+          opening_source: string
+          price_id: string | null
+          price_per_litre: number | null
+          product_id: string
+          rollover_max: number | null
+          shift_id: string
+          station_id: string
+          test_litres: number
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          closing_reading?: number | null
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          litres_sold?: number | null
+          nozzle_id: string
+          opening_reading: number
+          opening_source: string
+          price_id?: string | null
+          price_per_litre?: number | null
+          product_id: string
+          rollover_max?: number | null
+          shift_id: string
+          station_id: string
+          test_litres?: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          closing_reading?: number | null
+          created_at?: string
+          id?: string
+          is_draft?: boolean
+          litres_sold?: number | null
+          nozzle_id?: string
+          opening_reading?: number
+          opening_source?: string
+          price_id?: string | null
+          price_per_litre?: number | null
+          product_id?: string
+          rollover_max?: number | null
+          shift_id?: string
+          station_id?: string
+          test_litres?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_readings_nozzle_id_fkey"
+            columns: ["nozzle_id"]
+            isOneToOne: false
+            referencedRelation: "nozzles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_readings_price_id_fkey"
+            columns: ["price_id"]
+            isOneToOne: false
+            referencedRelation: "fuel_prices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_readings_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_readings_shift_id_station_id_fkey"
+            columns: ["shift_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "shifts"
+            referencedColumns: ["id", "station_id"]
+          },
+        ]
+      }
+      shifts: {
+        Row: {
+          attendant_id: string
+          bank_received: number
+          card_received: number
+          cash_received: number
+          closed_at: string | null
+          closed_by: string | null
+          created_at: string
+          created_by: string
+          difference: number | null
+          id: string
+          name: string
+          notes: string | null
+          opening_float: number
+          other_received: number
+          price_at: string
+          shift_date: string
+          station_id: string
+          status: string
+          total_collected: number | null
+          total_litres: number | null
+          total_sales: number | null
+          updated_at: string
+          wallet_received: number
+        }
+        Insert: {
+          attendant_id: string
+          bank_received?: number
+          card_received?: number
+          cash_received?: number
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          created_by?: string
+          difference?: number | null
+          id?: string
+          name: string
+          notes?: string | null
+          opening_float?: number
+          other_received?: number
+          price_at: string
+          shift_date: string
+          station_id: string
+          status?: string
+          total_collected?: number | null
+          total_litres?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          wallet_received?: number
+        }
+        Update: {
+          attendant_id?: string
+          bank_received?: number
+          card_received?: number
+          cash_received?: number
+          closed_at?: string | null
+          closed_by?: string | null
+          created_at?: string
+          created_by?: string
+          difference?: number | null
+          id?: string
+          name?: string
+          notes?: string | null
+          opening_float?: number
+          other_received?: number
+          price_at?: string
+          shift_date?: string
+          station_id?: string
+          status?: string
+          total_collected?: number | null
+          total_litres?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          wallet_received?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shifts_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       station_members: {
         Row: {
           created_at: string
@@ -413,6 +635,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _price_shift_reading: {
+        Args: { _reading_id: string }
+        Returns: undefined
+      }
+      _total_shift: { Args: { _shift_id: string }; Returns: undefined }
+      close_shift: { Args: { _shift_id: string }; Returns: undefined }
+      correct_closed_collections: {
+        Args: { _reason: string; _shift_id: string; _values: Json }
+        Returns: undefined
+      }
+      correct_closed_reading: {
+        Args: {
+          _closing: number
+          _reading_id: string
+          _reason: string
+          _test: number
+        }
+        Returns: undefined
+      }
+      correct_shift_opening: {
+        Args: { _reading_id: string; _reason: string; _value: number }
+        Returns: undefined
+      }
       correct_tank_stock: {
         Args: { _new_litres: number; _reason: string; _tank_id: string }
         Returns: undefined
@@ -437,6 +682,41 @@ export type Database = {
       is_station_member: {
         Args: { _station_id: string; _user_id: string }
         Returns: boolean
+      }
+      save_shift_draft: {
+        Args: { _header: Json; _readings: Json; _shift_id: string }
+        Returns: undefined
+      }
+      set_shift_rollover: {
+        Args: { _reading_id: string; _reason: string; _rollover: number }
+        Returns: undefined
+      }
+      shift_litres: {
+        Args: {
+          _closing: number
+          _opening: number
+          _rollover: number
+          _test: number
+        }
+        Returns: number
+      }
+      start_shift: {
+        Args: {
+          _attendant: string
+          _date: string
+          _float: number
+          _name: string
+          _station_id: string
+        }
+        Returns: string
+      }
+      station_people: {
+        Args: { _station_id: string }
+        Returns: {
+          full_name: string
+          role: Database["public"]["Enums"]["station_role"]
+          user_id: string
+        }[]
       }
     }
     Enums: {
