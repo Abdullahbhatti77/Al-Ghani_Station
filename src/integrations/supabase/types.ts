@@ -14,6 +14,159 @@ export type Database = {
   }
   public: {
     Tables: {
+      fuel_prices: {
+        Row: {
+          created_at: string
+          created_by: string
+          effective_at: string
+          id: string
+          note: string | null
+          price_per_litre: number
+          product_id: string
+          station_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string
+          effective_at: string
+          id?: string
+          note?: string | null
+          price_per_litre: number
+          product_id: string
+          station_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          effective_at?: string
+          id?: string
+          note?: string | null
+          price_per_litre?: number
+          product_id?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_prices_product_id_station_id_fkey"
+            columns: ["product_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id", "station_id"]
+          },
+          {
+            foreignKeyName: "fuel_prices_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nozzles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+          is_active: boolean
+          meter_reading: number
+          number: number
+          product_id: string
+          station_id: string
+          tank_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          id?: string
+          is_active?: boolean
+          meter_reading?: number
+          number: number
+          product_id: string
+          station_id: string
+          tank_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          meter_reading?: number
+          number?: number
+          product_id?: string
+          station_id?: string
+          tank_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nozzles_product_id_station_id_fkey"
+            columns: ["product_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id", "station_id"]
+          },
+          {
+            foreignKeyName: "nozzles_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "nozzles_tank_id_station_id_fkey"
+            columns: ["tank_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
+            referencedColumns: ["id", "station_id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          code: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_fuel: boolean
+          name: string
+          station_id: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_fuel?: boolean
+          name: string
+          station_id: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_fuel?: boolean
+          name?: string
+          station_id?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -103,11 +256,167 @@ export type Database = {
         }
         Relationships: []
       }
+      suppliers: {
+        Row: {
+          address: string | null
+          business_name: string
+          contact_person: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          notes: string | null
+          opening_payable: number
+          phone: string | null
+          station_id: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          contact_person?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          opening_payable?: number
+          phone?: string | null
+          station_id: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          contact_person?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          opening_payable?: number
+          phone?: string | null
+          station_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suppliers_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tank_stock_corrections: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          new_litres: number
+          old_litres: number
+          reason: string
+          station_id: string
+          tank_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          new_litres: number
+          old_litres: number
+          reason: string
+          station_id: string
+          tank_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          new_litres?: number
+          old_litres?: number
+          reason?: string
+          station_id?: string
+          tank_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tank_stock_corrections_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tank_stock_corrections_tank_id_station_id_fkey"
+            columns: ["tank_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
+            referencedColumns: ["id", "station_id"]
+          },
+        ]
+      }
+      tanks: {
+        Row: {
+          capacity_litres: number
+          created_at: string
+          id: string
+          is_active: boolean
+          low_stock_litres: number
+          name: string
+          opening_stock_litres: number
+          product_id: string
+          station_id: string
+          updated_at: string
+        }
+        Insert: {
+          capacity_litres: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          low_stock_litres?: number
+          name: string
+          opening_stock_litres?: number
+          product_id: string
+          station_id: string
+          updated_at?: string
+        }
+        Update: {
+          capacity_litres?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          low_stock_litres?: number
+          name?: string
+          opening_stock_litres?: number
+          product_id?: string
+          station_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tanks_product_id_station_id_fkey"
+            columns: ["product_id", "station_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id", "station_id"]
+          },
+          {
+            foreignKeyName: "tanks_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      correct_tank_stock: {
+        Args: { _new_litres: number; _reason: string; _tank_id: string }
+        Returns: undefined
+      }
       create_station_with_owner: {
         Args: {
           _city: string

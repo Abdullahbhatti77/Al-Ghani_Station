@@ -8,6 +8,13 @@
       "when": 1793259290503,
       "tag": "0000_foundation",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793260211031,
+      "tag": "0001_station_setup",
+      "breakpoints": true
     }
   ]
 }
