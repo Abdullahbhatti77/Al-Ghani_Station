@@ -91,6 +91,8 @@ export function inventoryErrorKey(err: { message?: string } | null): Translation
     ["already_reviewed", "inv.err.alreadyReviewed"],
     ["future_date", "inv.err.futureDate"],
     ["reason_required", "validation.reasonMin"],
+    ["attendant_own_shift_only", "err.ownShift"],
+    ["attendant_needs_shift", "err.needShift"],
     ["forbidden", "shift.err.forbidden"],
     ["bad_amount", "validation.positive"],
   ];
