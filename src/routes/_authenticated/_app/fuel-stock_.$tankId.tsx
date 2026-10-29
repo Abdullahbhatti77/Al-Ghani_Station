@@ -31,7 +31,7 @@ const L = (n: number) => formatNumber(n, 2);
 function TankPage() {
   const t = useT();
   const { tankId } = Route.useParams();
-  const { stationId } = useStationCtx();
+  const { stationId, canEdit } = useStationCtx();
   const d = useInventory(stationId);
   const threshold = useThreshold();
   const [dialog, setDialog] = useState<"receive" | "dip" | "adjust" | null>(null);
@@ -77,7 +77,7 @@ function TankPage() {
             </>
           ) : <p className="text-muted-foreground">{t("inv.noDip")}</p>}
           <div className="mt-4 grid gap-2 sm:grid-cols-3">
-            <Button className="h-12" onClick={() => setDialog("receive")}><Truck className="h-4 w-4" aria-hidden />{t("inv.receive")}</Button>
+            {canEdit && <Button className="h-12" onClick={() => setDialog("receive")}><Truck className="h-4 w-4" aria-hidden />{t("inv.receive")}</Button>}
             <Button variant="outline" className="h-12" onClick={() => setDialog("dip")}><Gauge className="h-4 w-4" aria-hidden />{t("inv.dip")}</Button>
             <Button variant="outline" className="h-12" onClick={() => setDialog("adjust")}><Scale className="h-4 w-4" aria-hidden />{t("inv.adjust")}</Button>
           </div>

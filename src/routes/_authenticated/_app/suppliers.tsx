@@ -48,7 +48,7 @@ function SuppliersPage() {
     <>
       <PageHeader title={t("nav.suppliers")} description={t("fin.sup.desc")} />
       <div className="mb-6 grid gap-2 sm:grid-cols-3">
-        <Button size="lg" className="h-14 text-base" onClick={() => setD("receive")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>
+        {canEdit && <Button size="lg" className="h-14 text-base" onClick={() => setD("receive")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>}
         {canEdit && <Button size="lg" variant="outline" className="h-14 text-base" onClick={() => setD("pay")} disabled={!suppliers.length}><Banknote className="h-5 w-5" aria-hidden />{t("fin.qa.paySupplier")}</Button>}
         <Button asChild size="lg" variant="ghost" className="h-14 text-base"><Link to="/setup" search={{ step: "suppliers" }}>{t("fin.sup.manage")}</Link></Button>
       </div>
