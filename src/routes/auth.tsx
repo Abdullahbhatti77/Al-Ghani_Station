@@ -58,12 +58,12 @@ function AuthPage() {
         password: v.password,
         options: { emailRedirectTo: window.location.origin + "/dashboard", data: { full_name: v.fullName } },
       });
-      if (error) return toast.error(t("auth.genericError"));
+      if (error) { toast.error(t("auth.genericError")); return; }
       if (data.session) navigate({ to: "/dashboard" });
       else setSent(true);
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email: v.email, password: v.password });
-      if (error) return toast.error(t("auth.invalid"));
+      if (error) { toast.error(t("auth.invalid")); return; }
       navigate({ to: "/dashboard" });
     }
   });

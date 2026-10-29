@@ -48,7 +48,7 @@ function Reset() {
   const form = useForm<{ password: string }>({ resolver: zodResolver(z.object({ password: passwordSchema })) });
   const onSubmit = form.handleSubmit(async ({ password }) => {
     const { error } = await supabase.auth.updateUser({ password });
-    if (error) return toast.error(t("auth.genericError"));
+    if (error) { toast.error(t("auth.genericError")); return; }
     toast.success(t("auth.passwordUpdated"));
     navigate({ to: "/dashboard" });
   });

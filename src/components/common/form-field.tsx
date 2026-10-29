@@ -15,7 +15,7 @@ export function FormField({
   id: string;
   label: string;
   registration: UseFormRegisterReturn;
-  error?: FieldError;
+  error?: FieldError | undefined;
 } & InputHTMLAttributes<HTMLInputElement>) {
   const t = useT();
   return (

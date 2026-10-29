@@ -51,7 +51,7 @@ function SettingsPage() {
       .from("stations")
       .update({ name: v.name, city: v.city, contact_phone: v.phone, preferred_language: v.language })
       .eq("id", station.id);
-    if (error) return toast.error(t("auth.genericError"));
+    if (error) { toast.error(t("auth.genericError")); return; }
     await supabase.from("profiles").update({ preferred_language: v.language }).eq("id", user.id);
     setLang(v.language);
     await qc.invalidateQueries({ queryKey: myStationQuery.queryKey });
