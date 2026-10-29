@@ -21,6 +21,7 @@ export function useStationCtx() {
   return {
     stationId: data!.station.id,
     role,
+    userId: data!.userId,
     canEdit: role === "owner" || role === "manager",
     can: (p: Permission) => can(role, p),
   };

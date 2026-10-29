@@ -107,11 +107,13 @@ export function StartShiftDialog({ onClose }: { onClose: () => void }) {
   const t = useT();
   const qc = useQueryClient();
   const navigate = useNavigate();
-  const { stationId } = useStationCtx();
-  const { data: people } = useSuspenseQuery(peopleQuery(stationId));
+  const { stationId, can, userId } = useStationCtx();
+  const { data: allPeople } = useSuspenseQuery(peopleQuery(stationId));
+  // Attendants can only start shifts for themselves (also enforced by the backend).
+  const people = can("shifts.any") ? allPeople : allPeople.filter((p) => p.user_id === userId);
   const [date, setDate] = useState(todayKarachi());
   const [name, setName] = useState(t("shift.name.morning"));
-  const [attendant, setAttendant] = useState("");
+  const [attendant, setAttendant] = useState(can("shifts.any") ? "" : userId);
   const [float, setFloat] = useState("0");
   const [err, setErr] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);

@@ -53,7 +53,8 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/shifts/$shiftId" });
   const { step: raw, done } = Route.useSearch();
-  const { stationId, canEdit } = useStationCtx();
+  const { stationId, canEdit, can, userId } = useStationCtx();
+  const notMine = !can("shifts.any") && shift.attendant_id !== userId;
   const { data: nozzles } = useSuspenseQuery(nozzlesQuery(stationId));
   const { data: products } = useSuspenseQuery(productsQuery(stationId));
   const { data: prices } = useSuspenseQuery(pricesQuery(stationId));
