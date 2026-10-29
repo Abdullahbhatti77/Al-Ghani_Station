@@ -47,7 +47,7 @@ function ShiftPage() {
   return <ShiftWizard key={data.shift.id} shift={data.shift} readings={data.readings} corrections={data.corrections} />;
 }
 
-function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings: ShiftReading[]; corrections: { id: string; field: string; old_value: number | null; new_value: number | null; reason: string; created_at: string }[] }) {
+function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings: ShiftReading[]; corrections: { id: string; field: string; old_value: number | null; new_value: number | null; reason: string; created_at: string; created_by: string }[] }) {
   const t = useT();
   const qc = useQueryClient();
   const navigate = useNavigate({ from: "/shifts/$shiftId" });
@@ -332,7 +332,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
                     {rows.map((x) => <ClosedReadingDialog key={x.r.id} reading={x.r} label={`#${x.nz?.number}`} onDone={refresh} />)}
                   </div>
                 )}
-                <History corrections={corrections} />
+                <History corrections={corrections} person={person} />
               </>
             )}
           </div>
@@ -430,7 +430,7 @@ function ReasonDialog({ reading, kind, onDone }: { reading: ShiftReading; kind: 
         {isOpening ? <Pencil className="h-4 w-4" aria-hidden /> : <RotateCcw className="h-4 w-4" aria-hidden />}
         {t(isOpening ? "shift.correctOpening" : "shift.rollover")}
       </Button>
-      <FormDialog open={open} onOpenChange={setOpen} title={t(isOpening ? "shift.correctOpeningTitle" : "shift.rolloverTitle")} description={isOpening ? undefined : t("shift.rolloverHelp")}>
+      <FormDialog open={open} onOpenChange={setOpen} title={t(isOpening ? "shift.correctOpeningTitle" : "shift.rolloverTitle")} {...(isOpening ? {} : { description: t("shift.rolloverHelp") })}>
         <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); void submit(); }} noValidate>
           <div className="space-y-1.5">
             <Label htmlFor="rd-v">{t(isOpening ? "shift.newValue" : "shift.rolloverValue")}</Label>
@@ -520,7 +520,7 @@ function CollectionsDialog({ shift, onDone }: { shift: Shift; onDone: () => void
   );
 }
 
-function History({ corrections }: { corrections: { id: string; field: string; old_value: number | null; new_value: number | null; reason: string; created_at: string }[] }) {
+function History({ corrections, person }: { corrections: { id: string; field: string; old_value: number | null; new_value: number | null; reason: string; created_at: string; created_by: string }[]; person: (id: string) => string }) {
   const t = useT();
   const label = (f: string) => (f.endsWith("_received") ? t(`shift.${f}` as TranslationKey) : t(`shift.field.${f}` as TranslationKey));
   return (
@@ -531,7 +531,7 @@ function History({ corrections }: { corrections: { id: string; field: string; ol
           {corrections.map((c) => (
             <li key={c.id} className="border-b pb-2 last:border-0">
               <span className="font-medium">{label(c.field)}</span>: {c.old_value === null ? "—" : L(Number(c.old_value))} → {c.new_value === null ? "—" : L(Number(c.new_value))}
-              <span className="text-muted-foreground"> · {new Date(c.created_at).toLocaleString("en-PK")} · {c.reason}</span>
+              <span className="text-muted-foreground"> · {person(c.created_by)} · {new Date(c.created_at).toLocaleString("en-PK")} · {c.reason}</span>
             </li>
           ))}
         </ul>
