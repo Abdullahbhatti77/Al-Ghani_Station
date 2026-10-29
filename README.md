@@ -76,7 +76,7 @@ Full guide: [docs/LOCAL-DEVELOPMENT.md](docs/LOCAL-DEVELOPMENT.md).
 - [Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md)
 
 ## Implementation status
-**Implemented:** every module in the table above. There are 50 Vitest unit tests for the calculation, permission and translation logic.
+**Implemented:** every module in the table above. There are 51 Vitest unit tests for the calculation, permission and translation logic.
 
 **Partially verified:** a scripted API run covering a full station workflow (roles, isolation, idempotency) passed during development. That script is not part of the repository. Password reset email and multi-nozzle and meter-rollover shifts have not been tested end-to-end in a browser.
 

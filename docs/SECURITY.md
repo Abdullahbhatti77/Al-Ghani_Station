@@ -22,7 +22,7 @@ Transactional tables have no client INSERT, UPDATE or DELETE. Security-definer R
 Zod schemas in the UI. CHECK constraints, triggers (`check_nozzle_tank`, `guard_tank_update`, opening-balance guards) and RPC checks in the database.
 
 ## Secrets
-Only the publishable key and URL are shipped to the browser. The service-role key and database password are never in the repo or the client. `.env` is git-ignored.
+Only the publishable key and URL are shipped to the browser. The service-role key and database password are never in the repo or the client. `.env` is not listed in `.gitignore`. The Lovable-managed `.env` holds only public values, but if you fork the project, add `.env` to `.gitignore` before adding any secrets.
 
 ## Verified during development
 A scripted API run (not in the repo) confirmed the following were blocked: cross-station reads and writes, signed-out reads, price changes by non-owners, attendant deliveries/approvals/reversals/self-promotion, direct edits to closed shifts and audit writes.
