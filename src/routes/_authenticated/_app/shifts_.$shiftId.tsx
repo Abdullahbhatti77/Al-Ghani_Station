@@ -22,6 +22,7 @@ import {
   SHIFT_STEPS, type CollectionField, type Shift, type ShiftReading, type ShiftStep,
 } from "@/lib/shifts";
 import { supabase } from "@/integrations/supabase/client";
+import { ClosingPanels, computeClosing, ShiftLinkedRecords, useShiftMoney } from "@/components/finance/shift-cash";
 
 export const Route = createFileRoute("/_authenticated/_app/shifts_/$shiftId")({
   validateSearch: zodValidator(z.object({ step: fallback(z.string(), "start").default("start"), done: fallback(z.boolean(), false).optional() })),
@@ -67,7 +68,8 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   }, [readings, nozzles]);
 
   // local draft state, recovered from what is saved in the database
-  const [header, setHeader] = useState({ name: shift.name, attendant_id: shift.attendant_id, opening_float: String(shift.opening_float), notes: shift.notes ?? "" });
+  const [header, setHeader] = useState({ name: shift.name, attendant_id: shift.attendant_id, opening_float: String(shift.opening_float), notes: shift.notes ?? "", cash_counted: shift.cash_counted === null ? "" : String(shift.cash_counted) });
+  const [closeReason, setCloseReason] = useState("");
   const [coll, setColl] = useState<Record<CollectionField, string>>(() => Object.fromEntries(COLLECTION_FIELDS.map((f) => [f, String(shift[f])])) as Record<CollectionField, string>);
   const [vals, setVals] = useState<Record<string, Draft>>(() => Object.fromEntries(readings.map((r) => [r.id, { closing: r.closing_reading === null ? "" : String(r.closing_reading), test: String(r.test_litres) }])));
   useEffect(() => {
@@ -94,6 +96,11 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   const totalLitres = closed ? Number(shift.total_litres) : rows.reduce((s, x) => s + (x.litres ?? 0), 0);
   const collNums = Object.fromEntries(COLLECTION_FIELDS.map((f) => [f, closed ? Number(shift[f]) : (parseNum(coll[f]) ?? 0)])) as Record<CollectionField, number>;
   const rec = reconcile(totalSales, collNums);
+  const money = useShiftMoney(stationId, shift.id);
+  const floatNum = closed ? Number(shift.opening_float) : (parseNum(header.opening_float) || 0);
+  const countedNum = closed ? (shift.cash_counted === null ? null : Number(shift.cash_counted)) : (() => { const n = parseNum(header.cash_counted); return n === null || Number.isNaN(n) || n < 0 ? null : n; })();
+  const closing = computeClosing(shift, totalSales, collNums, floatNum, countedNum, money.linked);
+  const hasVariance = closing.sales.status !== "matched" || (closing.cashStatus !== null && closing.cashStatus !== "matched");
   const hasIssues = rows.some((x) => x.issue);
   const missingPrice = rows.some((x) => x.price === null);
   const person = (id: string) => people.find((p) => p.user_id === id)?.full_name ?? "—";
@@ -115,7 +122,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
     setBusy(true);
     const { error } = await supabase.rpc("save_shift_draft", {
       _shift_id: shift.id,
-      _header: { ...header, opening_float: f, ...Object.fromEntries(COLLECTION_FIELDS.map((k) => [k, parseNum(coll[k]) ?? 0])) },
+      _header: { ...header, opening_float: f, cash_counted: (() => { const n = parseNum(header.cash_counted); return n === null || Number.isNaN(n) || n < 0 ? null : n; })(), ...Object.fromEntries(COLLECTION_FIELDS.map((k) => [k, parseNum(coll[k]) ?? 0])) },
       _readings: rows.map((x) => {
         const c = parseNum(x.d.closing);
         return { id: x.r.id, closing_reading: c === null || Number.isNaN(c) || c < 0 ? null : c, test_litres: parseNum(x.d.test) ?? 0 };
@@ -140,7 +147,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
   async function closeShift() {
     if (!(await saveDraft(true))) return;
     setBusy(true);
-    const { error } = await supabase.rpc("close_shift", { _shift_id: shift.id });
+    const { error } = await supabase.rpc("close_shift", { _shift_id: shift.id, ...(closeReason ? { _reason: closeReason } : {}) });
     setBusy(false);
     refresh();
     if (error) return void toast.error(t(shiftErrorKey(error)));
@@ -157,7 +164,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
           <Big label={t("shift.totalSales")} value={formatPKR(totalSales)} />
           <Big label={t("shift.collected")} value={formatPKR(rec.collected)} />
           <Big label={t("shift.totalLitres")} value={`${L(totalLitres)} L`} />
-          <Big label={t("shift.difference")} value={<DiffText rec={rec} />} />
+          <Big label={t("shift.difference")} value={<DiffText rec={closing.sales} />} />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
           <Button asChild variant="outline" className="h-12"><Link to="/shifts">{t("shift.backToList")}</Link></Button>
@@ -307,21 +314,35 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <Big label={t("shift.totalSales")} value={formatPKR(totalSales)} sub={`${L(totalLitres)} L`} strong />
-              {step === "close" && <Big label={t("shift.collected")} value={formatPKR(rec.collected)} />}
-              {step === "close" && <Big label={t("shift.difference")} value={<DiffText rec={rec} />} />}
             </div>
+            {step === "close" && <ClosingPanels shift={shift} stationId={stationId} totalSales={totalSales} coll={collNums} float={floatNum} counted={countedNum} closed={closed} />}
             {step === "close" && !closed && (
               <div className="flex justify-end">
                 {hasIssues || missingPrice ? (
                   <p role="alert" className="text-sm font-medium text-destructive">{t(missingPrice ? "shift.err.noPrice" : "shift.fixIssues")}</p>
+                ) : countedNum === null ? (
+                  <p role="alert" className="text-sm font-medium text-destructive">{t("fin.err.cashCountMissing")}</p>
+                ) : hasVariance && !canEdit ? (
+                  <p role="alert" className="text-sm font-medium text-destructive">{t("fin.close.staffBlocked")}</p>
                 ) : (
+                  <div className="w-full space-y-3">
+                  {hasVariance && (
+                    <div className="space-y-1.5 rounded-xl border border-warning bg-warning/10 p-4">
+                      <Label htmlFor="close-reason">{t("fin.close.reasonLabel")}</Label>
+                      <Textarea id="close-reason" value={closeReason} onChange={(e) => setCloseReason(e.target.value)} maxLength={500} />
+                      <p className="text-xs text-muted-foreground">{t("fin.close.reasonHelp")}</p>
+                    </div>
+                  )}
+                  <div className="flex justify-end">
                   <ConfirmDialog
                     trigger={<Button size="lg" className="h-14 px-8 text-lg" disabled={busy}>{t("shift.closeNow")}</Button>}
                     title={t("shift.closeConfirmTitle")}
-                    body={t("shift.closeConfirmBody", { sales: formatPKR(totalSales), collected: formatPKR(rec.collected) })}
+                    body={`${t("shift.closeConfirmBody", { sales: formatPKR(totalSales), collected: formatPKR(rec.collected) })} ${t("fin.close.variances", { a: formatPKR(closing.sales.difference), b: formatPKR(closing.cashDiff ?? 0) })}`}
                     confirmLabel={t("shift.closeNow")}
-                    onConfirm={() => void closeShift()}
+                    onConfirm={() => { if (hasVariance && closeReason.trim().length < 3) return void toast.error(t("validation.reasonMin")); void closeShift(); }}
                   />
+                  </div>
+                  </div>
                 )}
               </div>
             )}
@@ -349,9 +370,10 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
                     <Input id={`col-${f}`} inputMode="decimal" disabled={closed} value={closed ? String(shift[f]) : coll[f]} onChange={(e) => setColl({ ...coll, [f]: e.target.value })} className="h-12 text-lg tabular-nums" />
                   </div>
                 ))}
-                <div className="space-y-1.5 opacity-60">
-                  <Label>{t("shift.udhaar")}</Label>
-                  <Input disabled value={t("shift.comingSoon")} className="h-12" aria-label={t("shift.udhaar")} />
+                <div className="space-y-1.5">
+                  <Label htmlFor="h-counted">{t("fin.close.countedLabel")}</Label>
+                  <Input id="h-counted" inputMode="decimal" disabled={closed} value={closed ? String(shift.cash_counted ?? "") : header.cash_counted} onChange={(e) => setHeader({ ...header, cash_counted: e.target.value })} className="h-12 text-lg font-semibold tabular-nums" />
+                  <p className="text-xs text-muted-foreground">{t("fin.close.countedHelp")}</p>
                 </div>
                 <div className="space-y-1.5 sm:col-span-2">
                   <Label htmlFor="h-notes">{t("shift.notes")}</Label>
@@ -361,11 +383,13 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
               <div className="space-y-3">
                 <Big label={t("shift.totalSales")} value={formatPKR(totalSales)} strong />
                 <Big label={t("shift.collected")} value={formatPKR(rec.collected)} />
-                <Big label={t("shift.difference")} value={<DiffText rec={rec} />} />
+                <Big label={t("fin.close.credit")} value={formatPKR(money.linked.creditSales)} />
                 <p className="text-xs text-muted-foreground">{t("shift.float")}: {formatPKR(parseNum(header.opening_float) || 0)}</p>
                 {closed && canEdit && <CollectionsDialog shift={shift} onDone={refresh} />}
               </div>
             </div>
+            <ClosingPanels shift={shift} stationId={stationId} totalSales={totalSales} coll={collNums} float={floatNum} counted={countedNum} closed={closed} />
+            <ShiftLinkedRecords shift={shift} stationId={stationId} closed={closed} />
           </div>
         )}
       </section>

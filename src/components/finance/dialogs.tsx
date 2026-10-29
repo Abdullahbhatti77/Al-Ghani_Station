@@ -35,7 +35,7 @@ export function useCustomers(stationId: string) {
   return { customers: c.data, txns: x.data, balances };
 }
 
-export function Field({ id, label, children, help }: { id: string; label: string; children: ReactNode; help?: string }) {
+export function Field({ id, label, children, help }: { id: string; label: string; children: ReactNode; help?: string | undefined }) {
   return (
     <div className="space-y-1.5">
       <Label htmlFor={id}>{label}</Label>
