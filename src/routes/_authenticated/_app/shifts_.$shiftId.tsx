@@ -164,7 +164,7 @@ function ShiftWizard({ shift, readings, corrections }: { shift: Shift; readings:
           <Big label={t("shift.totalSales")} value={formatPKR(totalSales)} />
           <Big label={t("shift.collected")} value={formatPKR(rec.collected)} />
           <Big label={t("shift.totalLitres")} value={`${L(totalLitres)} L`} />
-          <Big label={t("shift.difference")} value={<DiffText rec={rec} />} />
+          <Big label={t("shift.difference")} value={<DiffText rec={closing.sales} />} />
         </div>
         <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
           <Button asChild variant="outline" className="h-12"><Link to="/shifts">{t("shift.backToList")}</Link></Button>

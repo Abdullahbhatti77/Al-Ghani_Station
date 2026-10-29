@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { useSetupData, type SetupStep } from "@/components/setup/use-setup-status";
 import { useT, type TranslationKey } from "@/lib/i18n";
 import { myStationQuery } from "@/lib/station";
+import { useState } from "react";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { Banknote, CreditCard, HandCoins, Plus, Truck, UserPlus } from "lucide-react";
+import { formatPKR } from "@/lib/setup";
+import { customersQuery, customerTxnsQuery, customerBalance, expensesQuery } from "@/lib/finance";
+import { round2, todayKarachi } from "@/lib/shifts";
+import { CreditSaleDialog, CustomerDialog, ExpenseDialog, PaySupplierDialog, PaymentDialog } from "@/components/finance/dialogs";
+import { ReceiveFuelDialog } from "@/components/inventory/dialogs";
 
 export const Route = createFileRoute("/_authenticated/_app/dashboard")({
   head: () => ({
@@ -26,6 +34,13 @@ function Dashboard() {
   const station = data!.station;
 
   const { status } = useSetupData(station.id);
+  const [cu, tx, ex] = useSuspenseQueries({ queries: [customersQuery(station.id), customerTxnsQuery(station.id), expensesQuery(station.id)] });
+  const [qa, setQa] = useState<"cust" | "sale" | "pay" | "fuel" | "sup" | "exp" | null>(null);
+  const canEdit = data!.role !== "staff";
+  const udhaar = cu.data.length ? round2(cu.data.reduce((a, c) => a + customerBalance(Number(c.opening_balance), tx.data.filter((x) => x.customer_id === c.id)), 0)) : null;
+  const today = todayKarachi();
+  const todays = ex.data.filter((x) => !x.reversed_at && new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Karachi" }).format(new Date(x.occurred_at)) === today);
+  const todayExp = todays.length ? round2(todays.reduce((a, x) => a + Number(x.amount), 0)) : null;
   type StepLink = { key: TranslationKey; done: boolean; to: "/setup" | "/settings"; step?: SetupStep };
   const steps: StepLink[] = [
     { key: "dashboard.step.station", done: true, to: "/settings" },
@@ -43,8 +58,8 @@ function Dashboard() {
   const stats: { key: TranslationKey; value: string | null }[] = [
     { key: "dashboard.todaySales", value: null },
     { key: "dashboard.fuelLitres", value: null },
-    { key: "dashboard.udhaar", value: null },
-    { key: "dashboard.expenses", value: null },
+    { key: "dashboard.udhaar", value: udhaar === null ? null : formatPKR(udhaar) },
+    { key: "dashboard.expenses", value: todayExp === null ? null : formatPKR(todayExp) },
   ];
 
   return (
@@ -84,6 +99,24 @@ function Dashboard() {
           </Button>
         </section>
       )}
+
+      <section aria-labelledby="qa" className="mb-8">
+        <h2 id="qa" className="mb-3 text-lg font-semibold">{t("fin.quickActions")}</h2>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
+          {canEdit && <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("cust")}><UserPlus className="h-5 w-5" aria-hidden />{t("fin.qa.addCustomer")}</Button>}
+          <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("sale")} disabled={!cu.data.length}><CreditCard className="h-5 w-5" aria-hidden />{t("fin.qa.creditSale")}</Button>
+          <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("pay")} disabled={!cu.data.length}><HandCoins className="h-5 w-5" aria-hidden />{t("fin.qa.receivePayment")}</Button>
+          <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("fuel")}><Truck className="h-5 w-5" aria-hidden />{t("inv.receive")}</Button>
+          {canEdit && <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("sup")}><Banknote className="h-5 w-5" aria-hidden />{t("fin.qa.paySupplier")}</Button>}
+          <Button variant="outline" className="h-16 flex-col gap-1" onClick={() => setQa("exp")}><Plus className="h-5 w-5" aria-hidden />{t("fin.qa.addExpense")}</Button>
+        </div>
+        {qa === "cust" && <CustomerDialog onClose={() => setQa(null)} />}
+        {qa === "sale" && <CreditSaleDialog onClose={() => setQa(null)} />}
+        {qa === "pay" && <PaymentDialog onClose={() => setQa(null)} />}
+        {qa === "fuel" && <ReceiveFuelDialog onClose={() => setQa(null)} />}
+        {qa === "sup" && <PaySupplierDialog onClose={() => setQa(null)} />}
+        {qa === "exp" && <ExpenseDialog onClose={() => setQa(null)} />}
+      </section>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((s) => (
