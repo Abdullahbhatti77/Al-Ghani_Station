@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { CheckCircle2, Circle } from "lucide-react";
 import { PageHeader, StatCard } from "@/components/common/page";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useSetupData, type SetupStep } from "@/components/setup/use-setup-status";
 import { useT, type TranslationKey } from "@/lib/i18n";
 import { myStationQuery } from "@/lib/station";
 
@@ -23,15 +25,17 @@ function Dashboard() {
   const { data } = useSuspenseQuery(myStationQuery);
   const station = data!.station;
 
-  // Only the station profile exists in this foundation step; other steps
-  // become "done" once their modules store real records.
-  const steps: { key: TranslationKey; done: boolean; to?: "/settings" | "/fuel-stock" | "/shifts" }[] = [
+  const { status } = useSetupData(station.id);
+  type StepLink = { key: TranslationKey; done: boolean; to: "/setup" | "/settings"; step?: SetupStep };
+  const steps: StepLink[] = [
     { key: "dashboard.step.station", done: true, to: "/settings" },
-    { key: "dashboard.step.tanks", done: false, to: "/fuel-stock" },
-    { key: "dashboard.step.prices", done: false, to: "/fuel-stock" },
-    { key: "dashboard.step.staff", done: false, to: "/settings" },
-    { key: "dashboard.step.shift", done: false, to: "/shifts" },
+    { key: "dashboard.step.products", done: status.products, to: "/setup", step: "products" },
+    { key: "dashboard.step.tanks", done: status.tanks, to: "/setup", step: "tanks" },
+    { key: "dashboard.step.nozzles", done: status.nozzles, to: "/setup", step: "nozzles" },
+    { key: "dashboard.step.prices", done: status.prices, to: "/setup", step: "prices" },
+    { key: "dashboard.step.suppliers", done: status.suppliers, to: "/setup", step: "suppliers" },
   ];
+  const firstPending = steps.find((s) => !s.done && s.step)?.step ?? "review";
   const doneCount = steps.filter((s) => s.done).length;
   const incomplete = doneCount < steps.length;
 
@@ -57,10 +61,11 @@ function Dashboard() {
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
             <div className="h-full bg-success transition-all" style={{ width: `${(doneCount / steps.length) * 100}%` }} />
           </div>
+          <p className="mt-3 font-medium">{t("dashboard.setupProgress", { pct: Math.round((doneCount / steps.length) * 100) })}</p>
           <ul className="mt-4 divide-y">
             {steps.map((s) => (
               <li key={s.key}>
-                <Link to={s.to ?? "/dashboard"} className="flex min-h-12 items-center gap-3 py-2 hover:text-primary">
+                <Link to={s.to} search={s.step ? { step: s.step } : {}} className="flex min-h-12 items-center gap-3 py-2 hover:text-primary">
                   {s.done ? (
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-success" aria-hidden />
                   ) : (
@@ -74,6 +79,9 @@ function Dashboard() {
               </li>
             ))}
           </ul>
+          <Button asChild className="mt-4 h-11">
+            <Link to="/setup" search={{ step: firstPending }}>{t("setup.continue")}</Link>
+          </Button>
         </section>
       )}
 

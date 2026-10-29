@@ -22,6 +22,7 @@ import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppFuelStockRouteImport } from './routes/_authenticated/_app/fuel-stock'
 import { Route as AuthenticatedAppReportsRouteImport } from './routes/_authenticated/_app/reports'
 import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenticated/_app/settings'
+import { Route as AuthenticatedAppSetupRouteImport } from './routes/_authenticated/_app/setup'
 import { Route as AuthenticatedAppShiftsRouteImport } from './routes/_authenticated/_app/shifts'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/_app/suppliers'
 
@@ -93,6 +94,11 @@ const AuthenticatedAppSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppSetupRoute = AuthenticatedAppSetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => AuthenticatedAppRouteRoute,
+} as any)
 const AuthenticatedAppShiftsRoute = AuthenticatedAppShiftsRouteImport.update({
   id: '/shifts',
   path: '/shifts',
@@ -117,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/fuel-stock': typeof AuthenticatedAppFuelStockRoute
   '/reports': typeof AuthenticatedAppReportsRoute
   '/settings': typeof AuthenticatedAppSettingsRoute
+  '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
 }
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/fuel-stock': typeof AuthenticatedAppFuelStockRoute
   '/reports': typeof AuthenticatedAppReportsRoute
   '/settings': typeof AuthenticatedAppSettingsRoute
+  '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
 }
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/_authenticated/_app/fuel-stock': typeof AuthenticatedAppFuelStockRoute
   '/_authenticated/_app/reports': typeof AuthenticatedAppReportsRoute
   '/_authenticated/_app/settings': typeof AuthenticatedAppSettingsRoute
+  '/_authenticated/_app/setup': typeof AuthenticatedAppSetupRoute
   '/_authenticated/_app/shifts': typeof AuthenticatedAppShiftsRoute
   '/_authenticated/_app/suppliers': typeof AuthenticatedAppSuppliersRoute
 }
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/fuel-stock'
     | '/reports'
     | '/settings'
+    | '/setup'
     | '/shifts'
     | '/suppliers'
   fileRoutesByTo: FileRoutesByTo
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/fuel-stock'
     | '/reports'
     | '/settings'
+    | '/setup'
     | '/shifts'
     | '/suppliers'
   id:
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/fuel-stock'
     | '/_authenticated/_app/reports'
     | '/_authenticated/_app/settings'
+    | '/_authenticated/_app/setup'
     | '/_authenticated/_app/shifts'
     | '/_authenticated/_app/suppliers'
   fileRoutesById: FileRoutesById
@@ -304,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/setup': {
+      id: '/_authenticated/_app/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof AuthenticatedAppSetupRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/shifts': {
       id: '/_authenticated/_app/shifts'
       path: '/shifts'
@@ -328,6 +347,7 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppFuelStockRoute: typeof AuthenticatedAppFuelStockRoute
   AuthenticatedAppReportsRoute: typeof AuthenticatedAppReportsRoute
   AuthenticatedAppSettingsRoute: typeof AuthenticatedAppSettingsRoute
+  AuthenticatedAppSetupRoute: typeof AuthenticatedAppSetupRoute
   AuthenticatedAppShiftsRoute: typeof AuthenticatedAppShiftsRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
 }
@@ -339,6 +359,7 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppFuelStockRoute: AuthenticatedAppFuelStockRoute,
   AuthenticatedAppReportsRoute: AuthenticatedAppReportsRoute,
   AuthenticatedAppSettingsRoute: AuthenticatedAppSettingsRoute,
+  AuthenticatedAppSetupRoute: AuthenticatedAppSetupRoute,
   AuthenticatedAppShiftsRoute: AuthenticatedAppShiftsRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
 }

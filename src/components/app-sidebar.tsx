@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Clock, Fuel, Users, Truck, Receipt, BarChart3, Settings,
+  LayoutDashboard, ListChecks, Clock, Fuel, Users, Truck, Receipt, BarChart3, Settings,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarHeader,
@@ -8,8 +8,9 @@ import {
 } from "@/components/ui/sidebar";
 import { useT, type TranslationKey } from "@/lib/i18n";
 
-export const navItems: { to: "/dashboard" | "/shifts" | "/fuel-stock" | "/customers" | "/suppliers" | "/expenses" | "/reports" | "/settings"; key: TranslationKey; icon: typeof Fuel }[] = [
+export const navItems: { to: "/dashboard" | "/setup" | "/shifts" | "/fuel-stock" | "/customers" | "/suppliers" | "/expenses" | "/reports" | "/settings"; key: TranslationKey; icon: typeof Fuel }[] = [
   { to: "/dashboard", key: "nav.dashboard", icon: LayoutDashboard },
+  { to: "/setup", key: "nav.setup", icon: ListChecks },
   { to: "/shifts", key: "nav.shifts", icon: Clock },
   { to: "/fuel-stock", key: "nav.fuelStock", icon: Fuel },
   { to: "/customers", key: "nav.customers", icon: Users },
