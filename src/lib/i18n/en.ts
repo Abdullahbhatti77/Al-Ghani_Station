@@ -1,5 +1,6 @@
 import { inventoryEn } from "./inventory.en";
 import { shiftsEn } from "./shifts.en";
+import { financeEn } from "./finance.en";
 
 export const en = {
   "app.name": "PumpHisab",
@@ -273,6 +274,7 @@ export const en = {
   "dashboard.setupProgress": "Setup {pct}% complete",
   ...shiftsEn,
   ...inventoryEn,
+  ...financeEn,
 } as const;
 
 export type TranslationKey = keyof typeof en;

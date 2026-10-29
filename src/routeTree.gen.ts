@@ -25,8 +25,10 @@ import { Route as AuthenticatedAppSettingsRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppSetupRouteImport } from './routes/_authenticated/_app/setup'
 import { Route as AuthenticatedAppShiftsRouteImport } from './routes/_authenticated/_app/shifts'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/_app/suppliers'
+import { Route as AuthenticatedAppCustomersCustomerIdRouteImport } from './routes/_authenticated/_app/customers_.$customerId'
 import { Route as AuthenticatedAppFuelStockTankIdRouteImport } from './routes/_authenticated/_app/fuel-stock_.$tankId'
 import { Route as AuthenticatedAppShiftsShiftIdRouteImport } from './routes/_authenticated/_app/shifts_.$shiftId'
+import { Route as AuthenticatedAppSuppliersSupplierIdRouteImport } from './routes/_authenticated/_app/suppliers_.$supplierId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -112,6 +114,12 @@ const AuthenticatedAppSuppliersRoute =
     path: '/suppliers',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
+const AuthenticatedAppCustomersCustomerIdRoute =
+  AuthenticatedAppCustomersCustomerIdRouteImport.update({
+    id: '/customers_/$customerId',
+    path: '/customers/$customerId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
 const AuthenticatedAppFuelStockTankIdRoute =
   AuthenticatedAppFuelStockTankIdRouteImport.update({
     id: '/fuel-stock_/$tankId',
@@ -122,6 +130,12 @@ const AuthenticatedAppShiftsShiftIdRoute =
   AuthenticatedAppShiftsShiftIdRouteImport.update({
     id: '/shifts_/$shiftId',
     path: '/shifts/$shiftId',
+    getParentRoute: () => AuthenticatedAppRouteRoute,
+  } as any)
+const AuthenticatedAppSuppliersSupplierIdRoute =
+  AuthenticatedAppSuppliersSupplierIdRouteImport.update({
+    id: '/suppliers_/$supplierId',
+    path: '/suppliers/$supplierId',
     getParentRoute: () => AuthenticatedAppRouteRoute,
   } as any)
 
@@ -140,8 +154,10 @@ export interface FileRoutesByFullPath {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/customers/$customerId': typeof AuthenticatedAppCustomersCustomerIdRoute
   '/fuel-stock/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
+  '/suppliers/$supplierId': typeof AuthenticatedAppSuppliersSupplierIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,8 +174,10 @@ export interface FileRoutesByTo {
   '/setup': typeof AuthenticatedAppSetupRoute
   '/shifts': typeof AuthenticatedAppShiftsRoute
   '/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/customers/$customerId': typeof AuthenticatedAppCustomersCustomerIdRoute
   '/fuel-stock/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/shifts/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
+  '/suppliers/$supplierId': typeof AuthenticatedAppSuppliersSupplierIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,8 +197,10 @@ export interface FileRoutesById {
   '/_authenticated/_app/setup': typeof AuthenticatedAppSetupRoute
   '/_authenticated/_app/shifts': typeof AuthenticatedAppShiftsRoute
   '/_authenticated/_app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/_authenticated/_app/customers_/$customerId': typeof AuthenticatedAppCustomersCustomerIdRoute
   '/_authenticated/_app/fuel-stock_/$tankId': typeof AuthenticatedAppFuelStockTankIdRoute
   '/_authenticated/_app/shifts_/$shiftId': typeof AuthenticatedAppShiftsShiftIdRoute
+  '/_authenticated/_app/suppliers_/$supplierId': typeof AuthenticatedAppSuppliersSupplierIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -199,8 +219,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/customers/$customerId'
     | '/fuel-stock/$tankId'
     | '/shifts/$shiftId'
+    | '/suppliers/$supplierId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -217,8 +239,10 @@ export interface FileRouteTypes {
     | '/setup'
     | '/shifts'
     | '/suppliers'
+    | '/customers/$customerId'
     | '/fuel-stock/$tankId'
     | '/shifts/$shiftId'
+    | '/suppliers/$supplierId'
   id:
     | '__root__'
     | '/'
@@ -237,8 +261,10 @@ export interface FileRouteTypes {
     | '/_authenticated/_app/setup'
     | '/_authenticated/_app/shifts'
     | '/_authenticated/_app/suppliers'
+    | '/_authenticated/_app/customers_/$customerId'
     | '/_authenticated/_app/fuel-stock_/$tankId'
     | '/_authenticated/_app/shifts_/$shiftId'
+    | '/_authenticated/_app/suppliers_/$supplierId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -363,6 +389,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSuppliersRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
+    '/_authenticated/_app/customers_/$customerId': {
+      id: '/_authenticated/_app/customers_/$customerId'
+      path: '/customers/$customerId'
+      fullPath: '/customers/$customerId'
+      preLoaderRoute: typeof AuthenticatedAppCustomersCustomerIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
     '/_authenticated/_app/fuel-stock_/$tankId': {
       id: '/_authenticated/_app/fuel-stock_/$tankId'
       path: '/fuel-stock/$tankId'
@@ -375,6 +408,13 @@ declare module '@tanstack/react-router' {
       path: '/shifts/$shiftId'
       fullPath: '/shifts/$shiftId'
       preLoaderRoute: typeof AuthenticatedAppShiftsShiftIdRouteImport
+      parentRoute: typeof AuthenticatedAppRouteRoute
+    }
+    '/_authenticated/_app/suppliers_/$supplierId': {
+      id: '/_authenticated/_app/suppliers_/$supplierId'
+      path: '/suppliers/$supplierId'
+      fullPath: '/suppliers/$supplierId'
+      preLoaderRoute: typeof AuthenticatedAppSuppliersSupplierIdRouteImport
       parentRoute: typeof AuthenticatedAppRouteRoute
     }
   }
@@ -390,8 +430,10 @@ interface AuthenticatedAppRouteRouteChildren {
   AuthenticatedAppSetupRoute: typeof AuthenticatedAppSetupRoute
   AuthenticatedAppShiftsRoute: typeof AuthenticatedAppShiftsRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
+  AuthenticatedAppCustomersCustomerIdRoute: typeof AuthenticatedAppCustomersCustomerIdRoute
   AuthenticatedAppFuelStockTankIdRoute: typeof AuthenticatedAppFuelStockTankIdRoute
   AuthenticatedAppShiftsShiftIdRoute: typeof AuthenticatedAppShiftsShiftIdRoute
+  AuthenticatedAppSuppliersSupplierIdRoute: typeof AuthenticatedAppSuppliersSupplierIdRoute
 }
 
 const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
@@ -404,8 +446,12 @@ const AuthenticatedAppRouteRouteChildren: AuthenticatedAppRouteRouteChildren = {
   AuthenticatedAppSetupRoute: AuthenticatedAppSetupRoute,
   AuthenticatedAppShiftsRoute: AuthenticatedAppShiftsRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
+  AuthenticatedAppCustomersCustomerIdRoute:
+    AuthenticatedAppCustomersCustomerIdRoute,
   AuthenticatedAppFuelStockTankIdRoute: AuthenticatedAppFuelStockTankIdRoute,
   AuthenticatedAppShiftsShiftIdRoute: AuthenticatedAppShiftsShiftIdRoute,
+  AuthenticatedAppSuppliersSupplierIdRoute:
+    AuthenticatedAppSuppliersSupplierIdRoute,
 }
 
 const AuthenticatedAppRouteRouteWithChildren =

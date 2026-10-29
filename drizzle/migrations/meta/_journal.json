@@ -43,6 +43,13 @@
       "when": 1793263109276,
       "tag": "0005_adjustment_at_dip_time",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793265816761,
+      "tag": "0006_finance_udhaar_payables_expenses_cash",
+      "breakpoints": true
     }
   ]
 }
