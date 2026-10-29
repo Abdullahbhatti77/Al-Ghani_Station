@@ -181,7 +181,7 @@ export function SelectField<F extends FieldValues>({
         name={name}
         render={({ field }) => (
           <Select
-            value={(field.value as string) || undefined}
+            value={(field.value as string) ?? ""}
             onValueChange={(v) => {
               field.onChange(v);
               onChangeExtra?.(v);

@@ -11,8 +11,11 @@ export type Nozzle = T["nozzles"]["Row"];
 export type FuelPrice = T["fuel_prices"]["Row"];
 export type Supplier = T["suppliers"]["Row"];
 
-async function list<R>(table: keyof T, stationId: string, order: string, asc = true): Promise<R[]> {
-  const { data, error } = await supabase.from(table).select("*").eq("station_id", stationId).order(order, { ascending: asc });
+type StationTable = "products" | "tanks" | "nozzles" | "fuel_prices" | "suppliers";
+async function list<R>(table: StationTable, stationId: string, order: string, asc = true): Promise<R[]> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const q = supabase.from(table as "products").select("*") as any;
+  const { data, error } = await q.eq("station_id", stationId).order(order, { ascending: asc });
   if (error) throw error;
   return data as R[];
 }

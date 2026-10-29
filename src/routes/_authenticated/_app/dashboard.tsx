@@ -65,7 +65,7 @@ function Dashboard() {
           <ul className="mt-4 divide-y">
             {steps.map((s) => (
               <li key={s.key}>
-                <Link to={s.to} search={s.step ? { step: s.step } : undefined} className="flex min-h-12 items-center gap-3 py-2 hover:text-primary">
+                <Link to={s.to} search={s.step ? { step: s.step } : {}} className="flex min-h-12 items-center gap-3 py-2 hover:text-primary">
                   {s.done ? (
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-success" aria-hidden />
                   ) : (
