@@ -81,10 +81,10 @@ export function tankReport(movs: StockMovement[], dips: TankDip[], r: Range) {
   const k = (kinds: string[]) => sum(inside.filter((m) => kinds.includes(m.kind)), (m) => Number(m.litres));
   const dipsInRange = dips.filter((d) => inRange(karachiDate(d.measured_at), r));
   return {
-    opening: start,
+    opening: round2(start + k(["opening"])),
     deliveries: k(["delivery", "delivery_reversal"]),
     sales: round2(-k(["sale", "sale_correction"])),
-    adjustments: k(["adjustment", "opening"]),
+    adjustments: k(["adjustment"]),
     closing,
     dip: compareDip(movs, dipsInRange),
   };
