@@ -14,6 +14,95 @@ export type Database = {
   }
   public: {
     Tables: {
+      fuel_deliveries: {
+        Row: {
+          calculated_amount: number
+          challan_no: string
+          created_at: string
+          delivered_at: string
+          id: string
+          invoice_amount: number
+          litres: number
+          notes: string | null
+          product_id: string
+          rate_per_litre: number
+          received_by: string
+          reversal_reason: string | null
+          reversed_at: string | null
+          reversed_by: string | null
+          station_id: string
+          supplier_id: string
+          tank_id: string
+        }
+        Insert: {
+          calculated_amount: number
+          challan_no: string
+          created_at?: string
+          delivered_at: string
+          id?: string
+          invoice_amount: number
+          litres: number
+          notes?: string | null
+          product_id: string
+          rate_per_litre: number
+          received_by: string
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          station_id: string
+          supplier_id: string
+          tank_id: string
+        }
+        Update: {
+          calculated_amount?: number
+          challan_no?: string
+          created_at?: string
+          delivered_at?: string
+          id?: string
+          invoice_amount?: number
+          litres?: number
+          notes?: string | null
+          product_id?: string
+          rate_per_litre?: number
+          received_by?: string
+          reversal_reason?: string | null
+          reversed_at?: string | null
+          reversed_by?: string | null
+          station_id?: string
+          supplier_id?: string
+          tank_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_deliveries_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_deliveries_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_deliveries_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fuel_deliveries_tank_id_fkey"
+            columns: ["tank_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fuel_prices: {
         Row: {
           created_at: string
@@ -451,6 +540,7 @@ export type Database = {
           contact_phone: string
           created_at: string
           created_by: string
+          dip_variance_litres: number | null
           id: string
           name: string
           preferred_language: string
@@ -461,6 +551,7 @@ export type Database = {
           contact_phone: string
           created_at?: string
           created_by: string
+          dip_variance_litres?: number | null
           id?: string
           name: string
           preferred_language?: string
@@ -471,12 +562,137 @@ export type Database = {
           contact_phone?: string
           created_at?: string
           created_by?: string
+          dip_variance_litres?: number | null
           id?: string
           name?: string
           preferred_language?: string
           updated_at?: string
         }
         Relationships: []
+      }
+      stock_adjustments: {
+        Row: {
+          dip_id: string | null
+          id: string
+          litres: number
+          reason: string
+          requested_at: string
+          requested_by: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          station_id: string
+          status: string
+          tank_id: string
+        }
+        Insert: {
+          dip_id?: string | null
+          id?: string
+          litres: number
+          reason: string
+          requested_at?: string
+          requested_by: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          station_id: string
+          status?: string
+          tank_id: string
+        }
+        Update: {
+          dip_id?: string | null
+          id?: string
+          litres?: number
+          reason?: string
+          requested_at?: string
+          requested_by?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          station_id?: string
+          status?: string
+          tank_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_adjustments_dip_id_fkey"
+            columns: ["dip_id"]
+            isOneToOne: false
+            referencedRelation: "tank_dips"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_adjustments_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_adjustments_tank_id_fkey"
+            columns: ["tank_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_movements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          litres: number
+          note: string | null
+          occurred_at: string
+          shift_id: string | null
+          source_id: string
+          station_id: string
+          tank_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind: string
+          litres: number
+          note?: string | null
+          occurred_at: string
+          shift_id?: string | null
+          source_id: string
+          station_id: string
+          tank_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          litres?: number
+          note?: string | null
+          occurred_at?: string
+          shift_id?: string | null
+          source_id?: string
+          station_id?: string
+          tank_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_movements_tank_id_fkey"
+            columns: ["tank_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       suppliers: {
         Row: {
@@ -524,6 +740,54 @@ export type Database = {
             columns: ["station_id"]
             isOneToOne: false
             referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tank_dips: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          measured_at: string
+          measured_litres: number
+          notes: string | null
+          station_id: string
+          tank_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          measured_at: string
+          measured_litres: number
+          notes?: string | null
+          station_id: string
+          tank_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          measured_at?: string
+          measured_litres?: number
+          notes?: string | null
+          station_id?: string
+          tank_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tank_dips_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "stations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tank_dips_tank_id_fkey"
+            columns: ["tank_id"]
+            isOneToOne: false
+            referencedRelation: "tanks"
             referencedColumns: ["id"]
           },
         ]
@@ -683,6 +947,46 @@ export type Database = {
         Args: { _station_id: string; _user_id: string }
         Returns: boolean
       }
+      record_delivery: {
+        Args: {
+          _challan: string
+          _delivered_at: string
+          _invoice: number
+          _litres: number
+          _notes: string
+          _rate: number
+          _station_id: string
+          _supplier_id: string
+          _tank_id: string
+        }
+        Returns: string
+      }
+      record_tank_dip: {
+        Args: {
+          _litres: number
+          _measured_at: string
+          _notes: string
+          _tank_id: string
+        }
+        Returns: string
+      }
+      request_stock_adjustment: {
+        Args: {
+          _dip_id: string
+          _litres: number
+          _reason: string
+          _tank_id: string
+        }
+        Returns: string
+      }
+      reverse_delivery: {
+        Args: { _delivery_id: string; _reason: string }
+        Returns: undefined
+      }
+      review_stock_adjustment: {
+        Args: { _adjustment_id: string; _approve: boolean; _note: string }
+        Returns: undefined
+      }
       save_shift_draft: {
         Args: { _header: Json; _readings: Json; _shift_id: string }
         Returns: undefined
@@ -717,6 +1021,10 @@ export type Database = {
           role: Database["public"]["Enums"]["station_role"]
           user_id: string
         }[]
+      }
+      tank_expected: {
+        Args: { _at?: string; _tank_id: string }
+        Returns: number
       }
     }
     Enums: {

@@ -10,6 +10,7 @@ export type MyStation = {
     city: string;
     contact_phone: string;
     preferred_language: string;
+    dip_variance_litres: number | null;
   };
 };
 
@@ -21,7 +22,7 @@ export const myStationQuery = queryOptions({
     if (!uid) return null;
     const { data, error } = await supabase
       .from("station_members")
-      .select("role, station:stations(id, name, city, contact_phone, preferred_language)")
+      .select("role, station:stations(id, name, city, contact_phone, preferred_language, dip_variance_litres)")
       .eq("user_id", uid)
       .order("created_at", { ascending: true })
       .limit(1)

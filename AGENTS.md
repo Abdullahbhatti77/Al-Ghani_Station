@@ -17,6 +17,7 @@
 - Dashboard figures are `null` until real records exist; never render demo numbers as real — owners must trust the numbers.
 - Setup records (products, tanks, nozzles, suppliers) are archived via `is_active`, never deleted — history must stay reportable.
 - `fuel_prices` is insert-only; current price = latest `effective_at <= now` (`currentPrice` in `src/lib/setup.ts`) — past prices and sales never change.
-- Tank stock changes only through the `correct_tank_stock` RPC (trigger blocks direct edits) — every correction is logged with a reason.
 - Nozzle/tank product match is enforced by DB trigger `check_nozzle_tank` as well as the UI.
 - Shift data (shifts, shift_readings, shift_corrections) is read-only to clients; all writes go through security-definer RPCs (start_shift, save_shift_draft, close_shift, correct_*) that recompute litres/amount server-side with the same formula as `src/lib/shifts.ts` — prevents tampering and double posting.
+
+- Expected tank stock = sum of `stock_movements` (unique per kind+source_id); movements are posted only by security-definer RPCs/triggers (tank insert, record/reverse_delivery, close_shift, correct_closed_reading, approved review_stock_adjustment). Dips never change stock; `tanks.opening_stock_litres` is creation-time only — keeps one auditable source of truth.

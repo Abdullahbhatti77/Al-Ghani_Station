@@ -1,3 +1,4 @@
+import { inventoryEn } from "./inventory.en";
 import { shiftsEn } from "./shifts.en";
 
 export const en = {
@@ -271,6 +272,7 @@ export const en = {
   "dashboard.step.suppliers": "Add suppliers",
   "dashboard.setupProgress": "Setup {pct}% complete",
   ...shiftsEn,
+  ...inventoryEn,
 } as const;
 
 export type TranslationKey = keyof typeof en;

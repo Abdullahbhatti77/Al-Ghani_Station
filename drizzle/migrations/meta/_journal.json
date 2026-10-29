@@ -29,6 +29,20 @@
       "when": 1793261609794,
       "tag": "0003_shift_management",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793262704281,
+      "tag": "0004_fuel_inventory",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793263109276,
+      "tag": "0005_adjustment_at_dip_time",
+      "breakpoints": true
     }
   ]
 }

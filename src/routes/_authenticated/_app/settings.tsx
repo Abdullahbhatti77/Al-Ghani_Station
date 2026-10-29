@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useForm, Controller } from "react-hook-form";
@@ -5,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader, DataTable } from "@/components/common/page";
@@ -102,6 +104,8 @@ function SettingsPage() {
         </form>
       </section>
 
+      <ThresholdSection stationId={station.id} value={station.dip_variance_litres} canEdit={canEdit} />
+
       <section className="mt-8">
         <h2 className="mb-3 text-lg font-semibold">{t("settings.members")}</h2>
         {members.isPending ? (
@@ -122,5 +126,36 @@ function SettingsPage() {
         )}
       </section>
     </>
+  );
+}
+
+function ThresholdSection({ stationId, value, canEdit }: { stationId: string; value: number | null; canEdit: boolean }) {
+  const { t } = useI18n();
+  const qc = useQueryClient();
+  const [v, setV] = useState(value === null ? "" : String(value));
+  const [busy, setBusy] = useState(false);
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    const n = v.trim() === "" ? null : Number(v);
+    if (n !== null && (!Number.isFinite(n) || n < 0)) return void toast.error(t("validation.nonNegative"));
+    setBusy(true);
+    const { error } = await supabase.from("stations").update({ dip_variance_litres: n }).eq("id", stationId);
+    setBusy(false);
+    if (error) return void toast.error(t("auth.genericError"));
+    await qc.invalidateQueries({ queryKey: myStationQuery.queryKey });
+    toast.success(t("settings.saved"));
+  }
+  return (
+    <section className="mt-8 rounded-2xl border bg-card p-5 shadow-card sm:p-6">
+      <h2 className="text-lg font-semibold">{t("inv.thresholdTitle")}</h2>
+      <form onSubmit={save} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end" noValidate>
+        <div className="flex-1 space-y-1.5">
+          <Label htmlFor="dip-th">{t("inv.threshold")}</Label>
+          <Input id="dip-th" inputMode="decimal" value={v} disabled={!canEdit} onChange={(e) => setV(e.target.value)} className="h-11" />
+          <p className="text-xs text-muted-foreground">{t("inv.thresholdHelp")}</p>
+        </div>
+        {canEdit && <Button type="submit" className="h-11" disabled={busy}>{busy ? t("common.saving") : t("common.save")}</Button>}
+      </form>
+    </section>
   );
 }
