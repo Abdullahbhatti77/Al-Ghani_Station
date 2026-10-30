@@ -16,9 +16,9 @@ import { supplierOutstanding, supplierPaymentsQuery } from "@/lib/finance";
 export const Route = createFileRoute("/_authenticated/_app/suppliers")({
   head: () => ({
     meta: [
-      { title: "Suppliers & Payables — PumpHisab" },
+      { title: "Suppliers & Payables — Al-Ghani Station" },
       { name: "description", content: "Supplier purchases from fuel deliveries, payments made and outstanding payables." },
-      { property: "og:title", content: "Suppliers & Payables — PumpHisab" },
+      { property: "og:title", content: "Suppliers & Payables — Al-Ghani Station" },
       { property: "og:description", content: "Supplier purchases from fuel deliveries, payments made and outstanding payables." },
     ],
   }),

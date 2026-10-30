@@ -16,10 +16,10 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
     meta: [
-      { title: "Set up your station — PumpHisab" },
-      { name: "description", content: "Create your petrol station in PumpHisab." },
-      { property: "og:title", content: "Set up your station — PumpHisab" },
-      { property: "og:description", content: "Create your petrol station in PumpHisab." },
+      { title: "Set up your station — Al-Ghani Station" },
+      { name: "description", content: "Create your petrol station in Al-Ghani Station." },
+      { property: "og:title", content: "Set up your station — Al-Ghani Station" },
+      { property: "og:description", content: "Create your petrol station in Al-Ghani Station." },
     ],
   }),
   beforeLoad: async ({ context }) => {

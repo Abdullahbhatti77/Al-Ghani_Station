@@ -22,9 +22,9 @@ export const Route = createFileRoute("/_authenticated/_app/setup")({
   validateSearch: zodValidator(z.object({ step: fallback(z.string(), "products").default("products") })),
   head: () => ({
     meta: [
-      { title: "Station Setup — PumpHisab" },
+      { title: "Station Setup — Al-Ghani Station" },
       { name: "description", content: "Set up fuel products, tanks, nozzles, prices and suppliers step by step." },
-      { property: "og:title", content: "Station Setup — PumpHisab" },
+      { property: "og:title", content: "Station Setup — Al-Ghani Station" },
       { property: "og:description", content: "Set up fuel products, tanks, nozzles, prices and suppliers step by step." },
     ],
   }),

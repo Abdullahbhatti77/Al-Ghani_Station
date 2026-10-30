@@ -19,9 +19,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/_app/suppliers_/$supplierId")({
   head: () => ({
     meta: [
-      { title: "Supplier statement — PumpHisab" },
+      { title: "Supplier statement — Al-Ghani Station" },
       { name: "description", content: "Delivery invoices, payments and outstanding payable for a supplier." },
-      { property: "og:title", content: "Supplier statement — PumpHisab" },
+      { property: "og:title", content: "Supplier statement — Al-Ghani Station" },
       { property: "og:description", content: "Delivery invoices, payments and outstanding payable for a supplier." },
     ],
   }),

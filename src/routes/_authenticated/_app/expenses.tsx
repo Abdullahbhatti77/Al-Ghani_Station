@@ -20,9 +20,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/_app/expenses")({
   head: () => ({
     meta: [
-      { title: "Expenses — PumpHisab" },
+      { title: "Expenses — Al-Ghani Station" },
       { name: "description", content: "Daily station expenses by category and payment method." },
-      { property: "og:title", content: "Expenses — PumpHisab" },
+      { property: "og:title", content: "Expenses — Al-Ghani Station" },
       { property: "og:description", content: "Daily station expenses by category and payment method." },
     ],
   }),

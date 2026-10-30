@@ -2,9 +2,10 @@ import { inventoryEn } from "./inventory.en";
 import { shiftsEn } from "./shifts.en";
 import { financeEn } from "./finance.en";
 import { mvpEn } from "./mvp.en";
+import { landingEn } from "./landing.en";
 
 export const en = {
-  "app.name": "PumpHisab",
+  "app.name": "Al-Ghani Station",
   "app.tagline": "Simple daily accounts for your petrol pump",
   "lang.label": "Language",
   "lang.en": "English",
@@ -44,7 +45,7 @@ export const en = {
   "landing.f2": "Track fuel stock in every tank",
   "landing.f3": "Know who owes you udhaar",
 
-  "auth.signInTitle": "Sign in to PumpHisab",
+  "auth.signInTitle": "Sign in to Al-Ghani Station",
   "auth.signUpTitle": "Create your owner account",
   "auth.email": "Email",
   "auth.password": "Password",
@@ -277,6 +278,7 @@ export const en = {
   ...inventoryEn,
   ...financeEn,
   ...mvpEn,
+  ...landingEn,
 } as const;
 
 export type TranslationKey = keyof typeof en;

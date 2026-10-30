@@ -1,6 +1,6 @@
 # Architecture
 
-PumpHisab is a TanStack Start v1 app (React 19 + Vite 7) built for an edge/Worker runtime. The backend is Supabase (Postgres + Auth), provided through Lovable Cloud. The app has no custom HTTP API. The browser talks to Supabase directly:
+Al-Ghani Station is a TanStack Start v1 app (React 19 + Vite 7) built for an edge/Worker runtime. The backend is Supabase (Postgres + Auth), provided through Lovable Cloud. The app has no custom HTTP API. The browser talks to Supabase directly:
 - **Reads** use the Supabase JS client. Row Level Security (RLS) limits each read to the user's stations.
 - **Writes** to financial or operational records go through **security-definer Postgres functions (RPCs)**. These functions validate the input, recompute the totals and write audit rows.
 

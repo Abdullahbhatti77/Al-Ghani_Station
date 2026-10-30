@@ -20,9 +20,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/_app/shifts")({
   head: () => ({
     meta: [
-      { title: "Shifts — PumpHisab" },
+      { title: "Shifts — Al-Ghani Station" },
       { name: "description", content: "Start shifts, enter nozzle meter readings and close shifts with cash reconciliation." },
-      { property: "og:title", content: "Shifts — PumpHisab" },
+      { property: "og:title", content: "Shifts — Al-Ghani Station" },
       { property: "og:description", content: "Start shifts, enter nozzle meter readings and close shifts with cash reconciliation." },
     ],
   }),

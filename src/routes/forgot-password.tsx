@@ -13,10 +13,10 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Forgot password — PumpHisab" },
-      { name: "description", content: "Request a PumpHisab password reset link." },
-      { property: "og:title", content: "Forgot password — PumpHisab" },
-      { property: "og:description", content: "Request a PumpHisab password reset link." },
+      { title: "Forgot password — Al-Ghani Station" },
+      { name: "description", content: "Request a Al-Ghani Station password reset link." },
+      { property: "og:title", content: "Forgot password — Al-Ghani Station" },
+      { property: "og:description", content: "Request a Al-Ghani Station password reset link." },
     ],
   }),
   component: Forgot,

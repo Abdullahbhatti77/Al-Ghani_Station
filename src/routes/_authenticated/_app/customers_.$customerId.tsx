@@ -18,9 +18,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/_app/customers_/$customerId")({
   head: () => ({
     meta: [
-      { title: "Customer ledger — PumpHisab" },
+      { title: "Customer ledger — Al-Ghani Station" },
       { name: "description", content: "Udhaar ledger with credit sales, repayments and running balance." },
-      { property: "og:title", content: "Customer ledger — PumpHisab" },
+      { property: "og:title", content: "Customer ledger — Al-Ghani Station" },
       { property: "og:description", content: "Udhaar ledger with credit sales, repayments and running balance." },
     ],
   }),

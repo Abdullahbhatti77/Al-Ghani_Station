@@ -22,9 +22,9 @@ import { AlertBadges, tankState, useThreshold, VarianceText } from "@/components
 export const Route = createFileRoute("/_authenticated/_app/fuel-stock")({
   head: () => ({
     meta: [
-      { title: "Fuel Stock — PumpHisab" },
+      { title: "Fuel Stock — Al-Ghani Station" },
       { name: "description", content: "Expected tank stock, fuel deliveries, dip readings and stock adjustments for your station." },
-      { property: "og:title", content: "Fuel Stock — PumpHisab" },
+      { property: "og:title", content: "Fuel Stock — Al-Ghani Station" },
       { property: "og:description", content: "Expected tank stock, fuel deliveries, dip readings and stock adjustments for your station." },
     ],
   }),

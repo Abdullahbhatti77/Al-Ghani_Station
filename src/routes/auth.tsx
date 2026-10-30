@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AuthShell } from "@/components/common/auth-shell";
 import { FormField } from "@/components/common/form-field";
+import { PasswordField } from "@/components/common/password-field";
+import { authErrorMessage } from "@/lib/auth-errors";
 import { useT } from "@/lib/i18n";
 import { emailSchema, passwordSchema } from "@/lib/schemas";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,10 +19,10 @@ export const Route = createFileRoute("/auth")({
   validateSearch: search,
   head: () => ({
     meta: [
-      { title: "Sign in — PumpHisab" },
-      { name: "description", content: "Sign in or create your PumpHisab owner account." },
-      { property: "og:title", content: "Sign in — PumpHisab" },
-      { property: "og:description", content: "Sign in or create your PumpHisab owner account." },
+      { title: "Sign in — Al-Ghani Station" },
+      { name: "description", content: "Sign in or create your Al-Ghani Station owner account." },
+      { property: "og:title", content: "Sign in — Al-Ghani Station" },
+      { property: "og:description", content: "Sign in or create your Al-Ghani Station owner account." },
     ],
   }),
   component: AuthPage,
@@ -58,12 +60,12 @@ function AuthPage() {
         password: v.password,
         options: { emailRedirectTo: window.location.origin + "/dashboard", data: { full_name: v.fullName } },
       });
-      if (error) { toast.error(t("auth.genericError")); return; }
+      if (error) { toast.error(authErrorMessage(error, t)); return; }
       if (data.session) navigate({ to: "/dashboard" });
       else setSent(true);
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email: v.email, password: v.password });
-      if (error) { toast.error(t("auth.invalid")); return; }
+      if (error) { toast.error(authErrorMessage(error, t)); return; }
       navigate({ to: "/dashboard" });
     }
   });
@@ -79,9 +81,8 @@ function AuthPage() {
             <FormField id="fullName" label={t("auth.fullName")} registration={form.register("fullName")} error={e.fullName} autoComplete="name" />
           )}
           <FormField id="email" type="email" label={t("auth.email")} registration={form.register("email")} error={e.email} autoComplete="email" />
-          <FormField
+          <PasswordField
             id="password"
-            type="password"
             label={t("auth.password")}
             registration={form.register("password")}
             error={e.password}

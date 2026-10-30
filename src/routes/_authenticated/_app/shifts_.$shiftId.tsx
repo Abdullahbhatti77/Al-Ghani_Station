@@ -28,9 +28,9 @@ export const Route = createFileRoute("/_authenticated/_app/shifts_/$shiftId")({
   validateSearch: zodValidator(z.object({ step: fallback(z.string(), "start").default("start"), done: fallback(z.boolean(), false).optional() })),
   head: () => ({
     meta: [
-      { title: "Shift — PumpHisab" },
+      { title: "Shift — Al-Ghani Station" },
       { name: "description", content: "Enter meter readings, review sales and close the shift." },
-      { property: "og:title", content: "Shift — PumpHisab" },
+      { property: "og:title", content: "Shift — Al-Ghani Station" },
       { property: "og:description", content: "Enter meter readings, review sales and close the shift." },
     ],
   }),

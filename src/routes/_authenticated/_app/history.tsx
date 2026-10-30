@@ -16,9 +16,9 @@ import { auditQuery, karachiDate } from "@/lib/reports";
 export const Route = createFileRoute("/_authenticated/_app/history")({
   head: () => ({
     meta: [
-      { title: "Activity history — PumpHisab" },
+      { title: "Activity history — Al-Ghani Station" },
       { name: "description", content: "Who closed shifts, changed prices, approved adjustments and reversed records at your station." },
-      { property: "og:title", content: "Activity history — PumpHisab" },
+      { property: "og:title", content: "Activity history — Al-Ghani Station" },
       { property: "og:description", content: "Who closed shifts, changed prices, approved adjustments and reversed records at your station." },
     ],
   }),
