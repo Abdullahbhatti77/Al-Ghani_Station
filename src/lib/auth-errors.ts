@@ -1,6 +1,6 @@
 import type { TranslationKey } from "@/lib/i18n";
 
-type AuthLikeError = { code?: string | null; message?: string | null } | null | undefined;
+type AuthLikeError = { code?: string | null | undefined; message?: string | null | undefined } | null | undefined;
 
 const CODE_KEYS: Record<string, TranslationKey> = {
   weak_password: "auth.err.weakPassword",
