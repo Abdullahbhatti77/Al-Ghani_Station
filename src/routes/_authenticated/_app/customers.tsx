@@ -13,9 +13,9 @@ import { formatPKR } from "@/lib/setup";
 export const Route = createFileRoute("/_authenticated/_app/customers")({
   head: () => ({
     meta: [
-      { title: "Customers & Udhaar — PumpHisab" },
+      { title: "Customers & Udhaar — Al-Ghani Station" },
       { name: "description", content: "Credit customers, udhaar balances, credit sales and repayments for your station." },
-      { property: "og:title", content: "Customers & Udhaar — PumpHisab" },
+      { property: "og:title", content: "Customers & Udhaar — Al-Ghani Station" },
       { property: "og:description", content: "Credit customers, udhaar balances, credit sales and repayments for your station." },
     ],
   }),

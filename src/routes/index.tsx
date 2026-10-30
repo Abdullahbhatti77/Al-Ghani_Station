@@ -10,9 +10,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PumpHisab — Simple petrol pump accounts" },
+      { title: "Al-Ghani Station — Simple petrol pump accounts" },
       { name: "description", content: "Shifts, fuel stock, udhaar and expenses for Pakistani petrol pumps, in English or Roman Urdu." },
-      { property: "og:title", content: "PumpHisab — Simple petrol pump accounts" },
+      { property: "og:title", content: "Al-Ghani Station — Simple petrol pump accounts" },
       { property: "og:description", content: "Shifts, fuel stock, udhaar and expenses for Pakistani petrol pumps." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

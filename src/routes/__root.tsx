@@ -77,7 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PumpHisab — Petrol pump accounts" },
+      { title: "Al-Ghani Station — Petrol pump accounts" },
       { name: "description", content: "Simple petrol station management for Pakistani pump owners." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

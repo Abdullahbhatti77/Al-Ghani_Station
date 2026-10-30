@@ -35,9 +35,9 @@ export const Route = createFileRoute("/_authenticated/_app/reports")({
   }),
   head: () => ({
     meta: [
-      { title: "Reports — PumpHisab" },
+      { title: "Reports — Al-Ghani Station" },
       { name: "description", content: "Daily sales, stock, udhaar, supplier and expense reports for your petrol station." },
-      { property: "og:title", content: "Reports — PumpHisab" },
+      { property: "og:title", content: "Reports — Al-Ghani Station" },
       { property: "og:description", content: "Daily sales, stock, udhaar, supplier and expense reports for your petrol station." },
     ],
   }),

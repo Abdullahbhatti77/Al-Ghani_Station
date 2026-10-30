@@ -23,9 +23,9 @@ import { ReceiveFuelDialog } from "@/components/inventory/dialogs";
 export const Route = createFileRoute("/_authenticated/_app/dashboard")({
   head: () => ({
     meta: [
-      { title: "Today's summary — PumpHisab" },
+      { title: "Today's summary — Al-Ghani Station" },
       { name: "description", content: "Your petrol station's daily summary and setup checklist." },
-      { property: "og:title", content: "Today's summary — PumpHisab" },
+      { property: "og:title", content: "Today's summary — Al-Ghani Station" },
       { property: "og:description", content: "Your petrol station's daily summary and setup checklist." },
     ],
   }),

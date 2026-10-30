@@ -3,10 +3,11 @@ import { shiftsUr } from "./shifts.ur";
 import { inventoryUr } from "./inventory.ur";
 import { financeUr } from "./finance.ur";
 import { mvpUr } from "./mvp.ur";
+import { landingUr } from "./landing.ur";
 
 // Roman Urdu (Latin script only). Every key in `en` must exist here.
 export const ur: Record<TranslationKey, string> = {
-  "app.name": "PumpHisab",
+  "app.name": "Al-Ghani Station",
   "app.tagline": "Apne petrol pump ka rozana hisaab, aasaan tareeqay se",
   "lang.label": "Zaban",
   "lang.en": "English",
@@ -46,7 +47,7 @@ export const ur: Record<TranslationKey, string> = {
   "landing.f2": "Har tank ka fuel stock dekhein",
   "landing.f3": "Pata rahe kis ka udhaar baqi hai",
 
-  "auth.signInTitle": "PumpHisab mein sign in karein",
+  "auth.signInTitle": "Al-Ghani Station mein sign in karein",
   "auth.signUpTitle": "Apna owner account banayein",
   "auth.email": "Email",
   "auth.password": "Password",
@@ -279,4 +280,5 @@ export const ur: Record<TranslationKey, string> = {
   ...inventoryUr,
   ...financeUr,
   ...mvpUr,
+  ...landingUr,
 };

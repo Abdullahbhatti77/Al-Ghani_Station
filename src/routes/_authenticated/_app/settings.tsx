@@ -21,9 +21,9 @@ import { AccountSection, CategoriesSection, LanguageSection, LowStockSection, St
 export const Route = createFileRoute("/_authenticated/_app/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — PumpHisab" },
+      { title: "Settings — Al-Ghani Station" },
       { name: "description", content: "Manage your station details and members." },
-      { property: "og:title", content: "Settings — PumpHisab" },
+      { property: "og:title", content: "Settings — Al-Ghani Station" },
       { property: "og:description", content: "Manage your station details and members." },
     ],
   }),

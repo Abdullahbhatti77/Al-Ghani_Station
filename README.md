@@ -1,8 +1,8 @@
-# PumpHisab
+# Al-Ghani Station
 
 **Petrol station accounts for Pakistani pump owners, in English and Roman Urdu.**
 
-PumpHisab replaces the paper register at a petrol pump. Owners and staff record nozzle meter readings, close shifts, track fuel stock and deliveries, keep customer credit (*udhaar*), supplier balances and expenses, and read reports. All figures come from saved records.
+Al-Ghani Station replaces the paper register at a petrol pump. Owners and staff record nozzle meter readings, close shifts, track fuel stock and deliveries, keep customer credit (*udhaar*), supplier balances and expenses, and read reports. All figures come from saved records.
 
 > Status: MVP under active development. Nothing has been verified as production-ready. See [Implementation status](#implementation-status).
 
@@ -19,7 +19,7 @@ PumpHisab replaces the paper register at a petrol pump. Owners and staff record 
 - [Contributing](#contributing)
 
 ## Problem and goals
-Many pumps track meter readings, cash, udhaar and stock by hand. Mistakes and missing cash are hard to trace. PumpHisab aims to:
+Many pumps track meter readings, cash, udhaar and stock by hand. Mistakes and missing cash are hard to trace. Al-Ghani Station aims to:
 - calculate litres and sales from meter readings using the fuel price that was in effect at the time,
 - show any shortfall or excess at shift close, without hiding it,
 - keep one auditable ledger each for stock, udhaar and supplier balances,
@@ -84,7 +84,7 @@ Full guide: [docs/LOCAL-DEVELOPMENT.md](docs/LOCAL-DEVELOPMENT.md).
 
 ## Known limitations
 - No automated end-to-end or database (RLS) test suite in the repo.
-- Staff can be added only if they already have a PumpHisab account. There are no email invitations.
+- Staff can be added only if they already have a Al-Ghani Station account. There are no email invitations.
 - One station per user is assumed by the app shell.
 - No offline mode, SMS/WhatsApp notifications, or printed receipts.
 - Lubricants and other non-fuel products are not sold or stocked.
